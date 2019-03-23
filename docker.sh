@@ -3,7 +3,7 @@ set -e
 
 echo "Installing Docker client tools into $HOME/.local/bin/"
 
-dockerVer="18.09.1"
+dockerVer="18.09.3"
 machineVer="0.16.1"
 composeVer="1.23.2"
 
