@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-ver="2.12.3"
+ver="2.14.0"
 echo "Installing Helm $ver into $HOME/.local/bin"
 
 curl -fsS "https://storage.googleapis.com/kubernetes-helm/helm-v${ver}-linux-amd64.tar.gz" -o /tmp/helm.tar.gz
