@@ -1,7 +1,7 @@
 #!/bin/bash 
 set -e
 
-ver="0.11.13"
+ver="0.12.3"
 echo "Installing Terraform $ver into $HOME/.local/bin"
 
 cd /tmp
