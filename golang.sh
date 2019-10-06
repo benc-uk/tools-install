@@ -1,7 +1,7 @@
-#!/bin/bash 
-set -e  
+#!/bin/bash
+set -e
 
-ver="1.12.6"
+ver="1.13"
 echo "Installing Go $ver into /usr/local/"
 
 cd /tmp
