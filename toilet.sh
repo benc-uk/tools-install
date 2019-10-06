@@ -1,3 +1,3 @@
-sudo apt-get update
-sudo apt-get install toilet figlet
+sudo apt-get update -y
+sudo apt-get install toilet figlet -y
 

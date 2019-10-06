@@ -10,7 +10,7 @@ wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-pr
 sudo dpkg -i /tmp/packages-microsoft-prod.deb
 
 # Update the list of products
-sudo apt-get update
+sudo apt-get update -y
 
 # Install PowerShell
 sudo apt-get install -y powershell

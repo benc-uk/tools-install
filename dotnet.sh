@@ -11,5 +11,5 @@ sudo dpkg -i /tmp/packages-microsoft-prod.deb
 
 sudo add-apt-repository universe
 sudo apt-get install apt-transport-https
-sudo apt-get update
-sudo apt-get install dotnet-sdk-$ver
+sudo apt-get update -y
+sudo apt-get install dotnet-sdk-$ver -y
