@@ -4,13 +4,13 @@ set -e
 echo "Installing Docker client tools into $HOME/.local/bin/"
 
 #dockerVer="18.09.3"
-#machineVer="0.16.1"
+machineVer="0.16.2"
 composeVer="1.24.0"
 
 mkdir -p  $HOME/.local/bin
 
 # ****** JUNE 2019
-# ****** FOR WSL2 REMOVED EVERYTHING BUT DOCKER COMPOSE *******
+# ****** FOR WSL2 REMOVED MAIN docker CLIENT *******
 
 #echo "docker"
 #curl -sSL https://download.docker.com/linux/static/stable/x86_64/docker-$dockerVer.tgz -o /tmp/docker.tgz
@@ -20,9 +20,9 @@ mkdir -p  $HOME/.local/bin
 #rmdir docker/
 
 #echo "docker-machine"
-#curl -sSL https://github.com/docker/machine/releases/download/v$machineVer/docker-machine-`uname -s`-`uname -m` -o /tmp/docker-machine
-#chmod +x /tmp/docker-machine
-#cp /tmp/docker-machine $HOME/.local/bin/docker-machine
+curl -sSL https://github.com/docker/machine/releases/download/v$machineVer/docker-machine-`uname -s`-`uname -m` -o /tmp/docker-machine
+chmod +x /tmp/docker-machine
+cp /tmp/docker-machine $HOME/.local/bin/docker-machine
 
 echo "docker-compose"
 curl -sSL https://github.com/docker/compose/releases/download/$composeVer/docker-compose-`uname -s`-`uname -m` -o /tmp/docker-compose
