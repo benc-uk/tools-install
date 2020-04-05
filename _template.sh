@@ -1,5 +1,8 @@
 #!/bin/bash
 set -e
+source _lib.sh
 
-echo "Installing foo..."
+start 'foo'
 sudo apt update
+
+end 'foo' '--version'

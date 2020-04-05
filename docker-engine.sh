@@ -1,10 +1,14 @@
 #!/bin/bash 
 set -e 
+source _lib.sh
 
 #
 # WORKS ON WSL v2 ONLY!
 #
-echo "Installing Docker CE Engine/server..."
+start 'Docker Engine'
+
 curl -fsSL https://get.docker.com/ | sh
-sudo groupadd docker
+sudo groupadd docker || true
 sudo usermod -aG docker $USER
+
+end 'docker' '--version'

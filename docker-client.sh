@@ -1,16 +1,19 @@
 #!/bin/bash 
 set -e 
+source _lib.sh
 
-echo "Installing Docker client tools into $HOME/.local/bin/"
+echo "Installing Docker client tools..."
 
 #dockerVer="18.09.3"
 machineVer="0.16.2"
-composeVer="1.24.0"
+composeVer="1.25.4"
 
 mkdir -p  $HOME/.local/bin
 
-# ****** JUNE 2019
-# ****** FOR WSL2 REMOVED MAIN docker CLIENT *******
+start "Docker Machine v$machineVer"
+start "Docker Compose v$composeVer"
+
+# **** WSL2: removed client, now installed with Docker engine ****
 
 #echo "docker"
 #curl -sSL https://download.docker.com/linux/static/stable/x86_64/docker-$dockerVer.tgz -o /tmp/docker.tgz
@@ -19,7 +22,7 @@ mkdir -p  $HOME/.local/bin
 #mv docker/docker $HOME/.local/bin/docker
 #rmdir docker/
 
-#echo "docker-machine"
+echo "docker-machine"
 curl -sSL https://github.com/docker/machine/releases/download/v$machineVer/docker-machine-`uname -s`-`uname -m` -o /tmp/docker-machine
 chmod +x /tmp/docker-machine
 cp /tmp/docker-machine $HOME/.local/bin/docker-machine
@@ -29,3 +32,5 @@ curl -sSL https://github.com/docker/compose/releases/download/$composeVer/docker
 chmod +x /tmp/docker-compose
 cp /tmp/docker-compose $HOME/.local/bin/docker-compose
 
+end 'docker-machine' '--version'
+end 'docker-compose' '--version'

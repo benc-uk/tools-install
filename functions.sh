@@ -1,7 +1,8 @@
 #!/bin/bash 
 set -e 
+source _lib.sh
 
-echo "Installing Azure Functions Core Tools"
+start "Azure Functions v3 Core Tools"
 
 # Download the Microsoft repository GPG keys
 wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
@@ -9,4 +10,6 @@ wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-pr
 sudo dpkg -i /tmp/packages-microsoft-prod.deb
 
 sudo apt-get update
-sudo apt-get install azure-functions-core-tools
+sudo apt-get install -y azure-functions-core-tools-3
+
+end 'func' '--version'

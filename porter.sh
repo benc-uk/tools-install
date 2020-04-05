@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
+source _lib.sh
 
-echo "Installing Porter (latest) into $HOME/.porter/"
+start "Porter"
 
 curl https://cdn.deislabs.io/porter/latest/install-linux.sh | bash
+
+end 'porter' '--version'
