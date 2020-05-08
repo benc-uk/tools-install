@@ -1,9 +1,10 @@
 #!/bin/bash 
 set -e 
-source _lib.sh
+DIR=$(cd `dirname $0` && pwd)
+source $DIR/_lib.sh
 
 #
-# WORKS ON WSL v2 ONLY!
+# Only use on WSL v2 or real Linux system/VM 
 #
 start 'Docker Engine'
 

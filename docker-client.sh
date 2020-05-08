@@ -1,6 +1,7 @@
 #!/bin/bash 
 set -e 
-source _lib.sh
+DIR=$(cd `dirname $0` && pwd)
+source $DIR/_lib.sh
 
 echo "Installing Docker client tools..."
 

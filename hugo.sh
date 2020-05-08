@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-source _lib.sh
+DIR=$(cd `dirname $0` && pwd)
+source $DIR/_lib.sh
 
 ver="0.68.3"
 start "Hugo $ver"
