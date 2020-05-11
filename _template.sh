@@ -1,7 +1,12 @@
 #!/bin/bash
+
+#
+# Template file, this installs 'foo'
+#
+
 set -e
 DIR=$(cd `dirname $0` && pwd)
-source $DIR/_lib.sh
+source $DIR/.lib.sh
 
 start 'foo'
 sudo apt update

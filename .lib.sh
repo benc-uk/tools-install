@@ -1,3 +1,7 @@
+#
+# Helper functions for displaying output in a common way
+#
+
 start () {
   echo -e "\e[34m»»» 🚀 \e[32mInstalling \e[33m'$1'\e[32m ... \e[39m"
 }

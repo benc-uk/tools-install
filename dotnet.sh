@@ -1,7 +1,7 @@
 #!/bin/bash 
 set -e
 DIR=$(cd `dirname $0` && pwd)
-source $DIR/_lib.sh
+source $DIR/.lib.sh
 
 ver="3.1"
 start ".NET Core SDK $ver"
