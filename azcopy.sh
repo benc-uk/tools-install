@@ -3,7 +3,7 @@ set -e
 DIR=$(cd `dirname $0` && pwd)
 source $DIR/.lib.sh
 
-ver="10"
+ver="10.5.1"
 start "AzCopy v$ver"
 
 wget -q -O /tmp/azcopy.tar https://aka.ms/downloadazcopy-v$ver-linux

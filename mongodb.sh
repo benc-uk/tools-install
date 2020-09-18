@@ -10,4 +10,7 @@ echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/
 sudo apt-get update -y
 sudo apt-get install -y mongodb-org
 
+sudo mkdir -p /data/db
+sudo mkdir -p /var/log/mongodb
+
 end 'mongod' '--version'

@@ -3,7 +3,7 @@ set -e
 DIR=$(cd `dirname $0` && pwd)
 source $DIR/.lib.sh
 
-ver="0.12.24"
+ver="0.13.2"
 start "Terraform $ver"
 
 cd /tmp
@@ -12,5 +12,6 @@ curl -fsS "https://releases.hashicorp.com/terraform/${ver}/terraform_${ver}_linu
 unzip tf.zip
 mkdir -p  $HOME/.local/bin
 mv terraform $HOME/.local/bin
+rm tf.zip
 
 end 'terraform' '--version'

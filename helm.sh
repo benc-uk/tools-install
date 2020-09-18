@@ -3,7 +3,7 @@ set -e
 DIR=$(cd `dirname $0` && pwd)
 source $DIR/.lib.sh
 
-ver="3.1.2"
+ver="3.2.4"
 
 start "Helm v$ver"
 
@@ -14,4 +14,4 @@ sudo mv linux-amd64/helm $HOME/.local/bin
 rm helm.tar.gz
 rm -rf linux-amd64
 
-end 'helm' 'version'
+end 'helm' 'version --short'
