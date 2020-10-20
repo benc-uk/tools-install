@@ -3,7 +3,7 @@ set -e
 DIR=$(cd `dirname $0` && pwd)
 source $DIR/.lib.sh
 
-ver="0.13.2"
+ver="0.13.4"
 start "Terraform $ver"
 
 cd /tmp
