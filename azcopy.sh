@@ -1,19 +1,15 @@
 #!/bin/bash
 set -e
+
 DIR=$(cd `dirname $0` && pwd)
 source $DIR/.lib.sh
 
-ver="10.5.1"
-start "AzCopy v$ver"
+start "AzCopy"
 
-wget -q -O /tmp/azcopy.tar https://aka.ms/downloadazcopy-v$ver-linux
-cd /tmp
-tar -xf azcopy.tar
-cd azcopy_linux_amd64_$ver.*
-mkdir -p  $HOME/.local/bin
-mv ./azcopy $HOME/.local/bin/azcopy
-cd ..
-rm azcopy.tar
-rm -rf azcopy_linux_amd64_$ver.*
+wget https://aka.ms/downloadazcopy-v10-linux -O /tmp/azcopy.tar.gz
+tar -xzf /tmp/azcopy.tar.gz -C /tmp
+mkdir -p $HOME/.local/bin
+mv /tmp/azcopy_linux_amd64_*/azcopy $HOME/.local/bin
+rm -rf /tmp/azcopy*
 
 end 'azcopy' '--version'

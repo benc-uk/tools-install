@@ -3,7 +3,8 @@ set -e
 DIR=$(cd `dirname $0` && pwd)
 source $DIR/.lib.sh
 
-ver="3.1"
+#ver="3.1"
+ver="5.0"
 start ".NET Core SDK $ver"
 
 # Download the Microsoft repository GPG keys
