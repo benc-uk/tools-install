@@ -4,7 +4,7 @@ DIR=$(cd `dirname $0` && pwd)
 source $DIR/.lib.sh
 
 start "bicep"
-VER="0.1.37-alpha"
+VER="0.2.328"
 
 mkdir -p  $HOME/.local/bin
 
