@@ -3,7 +3,7 @@ set -e
 DIR=$(cd `dirname $0` && pwd)
 source $DIR/.lib.sh
 
-dockerVer="19.03.8"
+dockerVer="20.10.5"
 
 start "Docker CLI v$dockerVer"
 

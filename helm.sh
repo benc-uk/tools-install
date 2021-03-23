@@ -3,7 +3,7 @@ set -e
 DIR=$(cd `dirname $0` && pwd)
 source $DIR/.lib.sh
 
-ver="3.2.4"
+ver="3.5.3"
 
 start "Helm v$ver"
 
