@@ -3,7 +3,8 @@ set -e
 DIR=$(cd `dirname $0` && pwd)
 source $DIR/.lib.sh
 
-ver="1.15.10"
+#ver="1.15.10"
+ver="1.16.2"
 start "Go $ver"
 
 cd /tmp
