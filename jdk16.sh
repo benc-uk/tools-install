@@ -3,10 +3,10 @@ set -e
 DIR=$(cd `dirname $0` && pwd)
 source $DIR/.lib.sh
 
-start "Open JDK 16 & Maven"
+start "Adopt Open JDK 16"
 
-sudo apt-get -qq update
-sudo apt install -y openjdk-16-jdk maven
+wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
+echo "deb https://adoptopenjdk.jfrog.io/adoptopenjdk/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/adoptopenjdk.list
+sudo apt-get install -y adoptopenjdk-16-hotspot
 
 end 'java' '-version'
-end 'mvn' '-version'
