@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash 
 set -e
 
 get_latest_release() {
@@ -6,16 +6,16 @@ get_latest_release() {
   grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/'
 }
 
-VERSION=${1:-"$(get_latest_release Azure/bicep)"}
+VERSION=${1:-"$(get_latest_release docker/machine)"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
-CMD=bicep
-NAME="Azure Bicep"
+CMD=docker-machine
+NAME="Docker Machine"
 
 echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME \e[35mv$VERSION\e[0m ..."
 
-mkdir -p $INSTALL_DIR
-curl -sSL https://github.com/Azure/bicep/releases/download/v$VERSION/bicep-linux-x64 -o $INSTALL_DIR/bicep
-chmod +x $INSTALL_DIR/bicep
+curl -sSL https://github.com/docker/machine/releases/download/v$VERSION/docker-machine-`uname -s`-`uname -m` -o /tmp/docker-machine
+chmod +x /tmp/docker-machine
+mv /tmp/docker-machine $INSTALL_DIR/docker-machine
 
 echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
 echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"

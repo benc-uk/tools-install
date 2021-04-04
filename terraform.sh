@@ -1,17 +1,18 @@
 #!/bin/bash 
 set -e
-DIR=$(cd `dirname $0` && pwd)
-source $DIR/.lib.sh
 
-ver="0.13.4"
-start "Terraform $ver"
+VERSION=${1:-"0.14.9"}
+INSTALL_DIR=${2:-"$HOME/.local/bin"}
+CMD=terraform
+NAME=Terraform
 
-cd /tmp
-curl -fsS "https://releases.hashicorp.com/terraform/${ver}/terraform_${ver}_linux_amd64.zip" -o tf.zip
+echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME v$VERSION\e[0m ..."
 
-unzip tf.zip
-mkdir -p  $HOME/.local/bin
-mv terraform $HOME/.local/bin
-rm tf.zip
+curl -sSL "https://releases.hashicorp.com/terraform/${VERSION}/terraform_${VERSION}_linux_amd64.zip" -o /tmp/tf.zip
+unzip /tmp/tf.zip -d /tmp > /dev/null
+mkdir -p $INSTALL_DIR
+mv /tmp/terraform $INSTALL_DIR
+rm -f /tmp/tf.zip
 
-end 'terraform' '--version'
+echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
+echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"

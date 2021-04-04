@@ -1,15 +1,18 @@
-#!/bin/bash
+#!/bin/bash 
 set -e
 
-DIR=$(cd `dirname $0` && pwd)
-source $DIR/.lib.sh
+VERSION=${1:-"10"}
+INSTALL_DIR=${2:-"$HOME/.local/bin"}
+CMD=azcopy
+NAME="AzCopy"
 
-start "AzCopy"
+echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME \e[35mv$VERSION\e[0m ..."
 
-wget https://aka.ms/downloadazcopy-v10-linux -O /tmp/azcopy.tar.gz
+curl -sSL https://aka.ms/downloadazcopy-v$VERSION-linux -o /tmp/azcopy.tar.gz
 tar -xzf /tmp/azcopy.tar.gz -C /tmp
-mkdir -p $HOME/.local/bin
-mv /tmp/azcopy_linux_amd64_*/azcopy $HOME/.local/bin
+mkdir -p $INSTALL_DIR
+mv /tmp/azcopy_linux_amd64_*/azcopy $INSTALL_DIR
 rm -rf /tmp/azcopy*
 
-end 'azcopy' '--version'
+echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
+echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"

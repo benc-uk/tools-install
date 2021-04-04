@@ -1,17 +1,19 @@
 #!/bin/bash 
-set -e 
-DIR=$(cd `dirname $0` && pwd)
-source $DIR/.lib.sh
+set -e
 
-dockerVer="20.10.5"
+VERSION=${1:-"20.10.5"}
+INSTALL_DIR=${2:-"$HOME/.local/bin"}
+CMD=docker
+NAME="Docker Client"
 
-start "Docker CLI v$dockerVer"
+echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME \e[35mv$VERSION\e[0m ..."
 
-mkdir -p  $HOME/.local/bin
-curl -sSL https://download.docker.com/linux/static/stable/x86_64/docker-$dockerVer.tgz -o /tmp/docker.tgz
+mkdir -p $INSTALL_DIR
+curl -sSL https://download.docker.com/linux/static/stable/x86_64/docker-$VERSION.tgz -o /tmp/docker.tgz
 tar -zxvf /tmp/docker.tgz docker/docker
 chmod +x docker/docker
-mv docker/docker $HOME/.local/bin/docker
+mv docker/docker $INSTALL_DIR/docker
 rmdir docker/
 
-end 'docker' '--version'
+echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
+echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"
