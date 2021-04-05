@@ -1,7 +1,12 @@
 #!/bin/bash 
 set -e
 
-VERSION=${1:-"0.14.9"}
+get_latest_release() {
+  curl --silent "https://api.github.com/repos/$1/releases/latest" |
+  grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/'
+}
+
+VERSION=${1:-"$(get_latest_release hashicorp/terraform)"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=terraform
 NAME=Terraform

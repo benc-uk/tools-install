@@ -1,20 +1,19 @@
 #!/bin/bash 
 set -e  
-DIR=$(cd `dirname $0` && pwd)
-source $DIR/.lib.sh
 
-start "Installing Powershell Core"
+CMD=pwsh
+NAME="PowerShell"
+
+echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME\e[0m ..."
 
 # Download the Microsoft repository GPG keys
-wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
-
+wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
 # Register the Microsoft repository GPG keys
 sudo dpkg -i /tmp/packages-microsoft-prod.deb
+rm -f /tmp/packages-microsoft-prod.deb
 
-# Update the list of products
-sudo apt-get update -y
-
-# Install PowerShell
+sudo apt-get update -y -qq
 sudo apt-get install -y powershell
 
-end 'pwsh' '--version'
+echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
+echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"

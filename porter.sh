@@ -1,10 +1,12 @@
 #!/bin/bash
 set -e
-DIR=$(cd `dirname $0` && pwd)
-source $DIR/.lib.sh
 
-start "Porter"
+CMD=porter
+NAME="Porter"
 
-curl https://cdn.deislabs.io/porter/latest/install-linux.sh | bash
+echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME\e[0m ..."
 
-end 'porter' '--version'
+curl https://cdn.porter.sh/latest/install-linux.sh | bash
+
+echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
+echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"

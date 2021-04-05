@@ -1,12 +1,13 @@
 #!/bin/bash 
 set -e 
-DIR=$(cd `dirname $0` && pwd)
-source $DIR/.lib.sh
 
-start "Open JDK 11 & Maven"
+CMD=java
+NAME="Java OpenJDK 11"
+
+echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME\e[0m ..."
 
 sudo apt-get -qq update
 sudo apt install -y openjdk-11-jdk maven
 
-end 'java' '-version'
-end 'mvn' '-version'
+echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
+echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"

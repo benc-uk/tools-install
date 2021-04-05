@@ -1,12 +1,16 @@
 #!/bin/bash
 set -e
-DIR=$(cd `dirname $0` && pwd)
-source $DIR/.lib.sh
 
-start 'ngrok'
+CMD=ngrok
+NAME="ngrok"
+INSTALL_DIR=${2:-"$HOME/.local/bin"}
 
-mkdir -p  $HOME/.local/bin
-wget -q "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip" -O $HOME/.local/bin/ngrok-stable-linux-amd64.zip
-unzip $HOME/.local/bin/ngrok-stable-linux-amd64.zip -d $HOME/.local/bin/
+echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME\e[0m ..."
 
-end 'ngrok' 'version'
+mkdir -p $INSTALL_DIR
+wget -q "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip" -O /tmp/ngrok.zip
+unzip /tmp/ngrok-stable-linux-amd64.zip -d $INSTALL_DIR
+rm -f /tmp/ngrok-stable-linux-amd64.zip
+
+echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
+echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"

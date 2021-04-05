@@ -1,15 +1,13 @@
 #!/bin/bash
 set -e
-DIR=$(cd `dirname $0` && pwd)
-source $DIR/.lib.sh
 
-start "Yarn"
+CMD=yarn
+NAME="Yarn"
 
-curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-sudo apt update && sudo apt install yarn
+echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME\e[0m ..."
 
-echo -e "\nInstalled to: `which yarn`"
-echo -e "\nVersion details: `yarn -v`"
+npm install -g yarn
 
-end "yarn" "--version"
+echo -e "\n\e[34m»»» 👲 \e[32mYarn is now managed per-project, see https://yarnpkg.com/getting-started/install#per-project-install"
+echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
+echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"

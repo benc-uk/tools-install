@@ -1,14 +1,14 @@
 #!/bin/bash
-set -e
-DIR=$(cd `dirname $0` && pwd)
-source $DIR/.lib.sh
+VERSION=${1:-"14"}
+INSTALL_DIR=${2:-"$HOME/.local/bin"}
+CMD=node
+NAME="Node.js"
 
-start "Node.js 14.x LTS"
+echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME \e[35mv$VERSION\e[0m ..."
 
 curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
 sudo apt install -y nodejs
 
-echo -e "\nInstalled to: `which node`"
-echo -e "\nVersion details: \n`node -v`"
-
-end "node" "--version"
+echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
+echo -e "\e[34m»»» 💡 \e[32mNode version details: \e[39m$($CMD --version)"
+echo -e "\e[34m»»» 💡 \e[32mNPM version details: \e[39m$(npm --version)"
