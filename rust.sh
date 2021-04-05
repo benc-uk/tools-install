@@ -4,7 +4,7 @@ set -e
 CMD=rustc
 NAME="Rust and Cargo"
 
-curl https://sh.rustup.rs -sSf | sh
+curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path
 
 export PATH="$PATH:$HOME/.cargo/bin"
 echo -e "\n\e[31m»»» 📢 \e[32mNote! '\$HOME/.cargo/bin' was temporarily added to your PATH"
