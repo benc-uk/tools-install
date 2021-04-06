@@ -24,16 +24,3 @@ chmod +x $INSTALL_DIR/kubens
 rm -rf /tmp/tmp.tar.gz
 
 echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
-
-exit
-
-
-start "kubens & kubectx"
-
-mkdir -p  $HOME/.local/bin
-
-curl -s https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens > ~/.local/bin/kubens
-chmod u+x ~/.local/bin/kubens
-
-curl -s https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx > ~/.local/bin/kubectx
-chmod u+x ~/.local/bin/kubectx
