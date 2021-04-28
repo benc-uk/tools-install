@@ -14,6 +14,7 @@ tar -zxvf /tmp/docker.tgz docker/docker
 chmod +x docker/docker
 mv docker/docker $INSTALL_DIR/docker
 rmdir docker/
+rm -rf /tmp/docker.tgz
 
 echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
 echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"
