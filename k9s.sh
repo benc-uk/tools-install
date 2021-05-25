@@ -11,7 +11,7 @@ INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=k9s
 NAME="k9s"
 
-curl -sL "https://github.com/derailed/k9s/releases/download/v$VERSION/k9s_Linux_x86_64.tar.gz" -o /tmp/k9s.tar.gz
+curl -sL "https://github.com/derailed/k9s/releases/download/v${VERSION}/k9s_v${VERSION}_Linux_x86_64.tar.gz" -o /tmp/k9s.tar.gz
 tar -xf /tmp/k9s.tar.gz -C /tmp k9s
 mkdir -p $INSTALL_DIR
 sudo mv /tmp/k9s $INSTALL_DIR
