@@ -13,12 +13,9 @@ NAME="Helm"
 
 echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME \e[35mv$VERSION\e[0m ..."
 
-curl -fsS "https://get.helm.sh/helm-v$VERSION-linux-amd64.tar.gz" -o /tmp/helm.tar.gz
-tar -zxf /tmp/helm.tar.gz -C /tmp linux-amd64/helm
-mkdir -p $INSTALL_DIR
-sudo mv /tmp/linux-amd64/helm $INSTALL_DIR
-rm -f /tmp/helm.tar.gz
-rm -rf /tmp/linux-amd64
+mkdir -p "$INSTALL_DIR"
+curl -fsSL "https://get.helm.sh/helm-v$VERSION-linux-amd64.tar.gz" | \
+     tar -zx -C "$INSTALL_DIR" --strip-components 1 linux-amd64/$CMD
 
 echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
 echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD version)"
