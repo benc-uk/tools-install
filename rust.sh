@@ -4,6 +4,8 @@ set -e
 CMD=rustc
 NAME="Rust and Cargo"
 
+echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME\e[0m ..."
+
 curl https://sh.rustup.rs -sSf | sh -s -- --no-modify-path
 
 export PATH="$PATH:$HOME/.cargo/bin"

@@ -6,7 +6,8 @@ get_latest_release() {
   grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/'
 }
 
-VERSION=${1:-"$(get_latest_release helm/helm)"}
+GITHUB="helm/helm"
+VERSION=${1:-"$(get_latest_release $GITHUB)"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=helm
 NAME="Helm"

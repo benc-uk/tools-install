@@ -14,4 +14,5 @@ sudo apt-get install -y \
   apt-transport-https \
   lsb-release \
   gnupg \
-  shellcheck
+  shellcheck \
+  ncdu

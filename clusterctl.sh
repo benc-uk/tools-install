@@ -1,16 +1,22 @@
 #!/bin/bash 
 set -e
 
-VERSION=${1:-"0.3.19"}
+get_latest_release() {
+  curl --silent "https://api.github.com/repos/$1/releases/latest" |
+  grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/'
+}
+
+GITHUB="kubernetes-sigs/cluster-api"
+VERSION=${1:-"$(get_latest_release $GITHUB)"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=clusterctl
 NAME="K8S Cluster API"
 
 echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME v$VERSION\e[0m ..."
 
-curl -SsL https://github.com/kubernetes-sigs/cluster-api/releases/download/v${VERSION}/clusterctl-linux-amd64 -o /tmp/clusterctl
-chmod +x /tmp/clusterctl
-sudo mv /tmp/clusterctl $INSTALL_DIR/clusterctl
+mkdir -p "$INSTALL_DIR"
+curl -SsL https://github.com/$GITHUB/releases/download/v"${VERSION}"/clusterctl-linux-amd64 -o "$INSTALL_DIR"/clusterctl
+chmod +x "$INSTALL_DIR"/clusterctl
 
-echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
+echo -e "\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
 echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD version)"

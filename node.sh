@@ -1,12 +1,11 @@
 #!/bin/bash
-VERSION=${1:-"14"}
-INSTALL_DIR=${2:-"$HOME/.local/bin"}
+VERSION=${1:-"16"}
 CMD=node
 NAME="Node.js"
 
 echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME \e[35mv$VERSION\e[0m ..."
 
-curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+curl -sL "https://deb.nodesource.com/setup_${VERSION}.x" | sudo -E bash -
 sudo apt install -y nodejs
 
 echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"

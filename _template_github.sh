@@ -6,19 +6,19 @@ get_latest_release() {
   grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/'
 }
 
-VERSION=${1:-"$(get_latest_release bytecodealliance/wasmtime)"}
+GITHUB="__changeme__/__changeme__"
+VERSION=${1:-"$(get_latest_release $GITHUB)"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
-CMD=wasmtime
-NAME=wasmtime
+CMD=__changeme__
+NAME=__changeme__
 
 echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME v$VERSION\e[0m ..."
 
-curl -fsSL "https://github.com/bytecodealliance/wasmtime/releases/download/v$VERSION/wasmtime-v$VERSION-x86_64-linux.tar.xz" -o /tmp/wasmtime.tar.xz
-tar -xf /tmp/wasmtime.tar.xz --strip-components 1 -C /tmp wasmtime-v"${VERSION}"-x86_64-linux/wasmtime
 mkdir -p "$INSTALL_DIR"
-sudo mv /tmp/wasmtime "$INSTALL_DIR"
-rm -f /tmp/wasmtime.tar.xz
-rm -rf /tmp/wasmtime
+curl -sSL https://github.com/$GITHUB/releases/download/v"${VERSION}"/__changeme__"${VERSION}"__changeme__.tar.gz | \
+     tar -zx -C "$INSTALL_DIR" $CMD
+# You many need to use strip components if the command is in sub-folder
+#    tar -zx -C "$INSTALL_DIR" --strip-components 1 some_sub_folder/$CMD
 
 echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
 echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"
