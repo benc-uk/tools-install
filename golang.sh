@@ -12,7 +12,8 @@ NAME="Go Language"
 echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME \e[35mv$VERSION\e[0m ..."
 
 cd /tmp
-curl -fsS https://dl.google.com/go/go"${VERSION}".linux-amd64.tar.gz -o golang.tar.gz
+
+curl -fsSL "https://go.dev/dl/go${VERSION}.linux-amd64.tar.gz" -o golang.tar.gz
 
 sudo tar -xvf golang.tar.gz
 sudo rm -rf /usr/local/go
