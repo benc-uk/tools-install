@@ -9,6 +9,7 @@ sudo apt-get update -y -qq
 sudo apt-get install -y \
   jq \
   curl \
+  git \
   wget \
   unzip \
   apt-transport-https \
