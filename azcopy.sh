@@ -1,18 +1,18 @@
 #!/bin/bash 
 set -e
 
+source <(curl -sSL https://t.ly/toollib) # Load libary from remote URL, it's safe!
+
 VERSION=${1:-"10"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=azcopy
 NAME="Azure Copy"
 
-echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME \e[35mv$VERSION\e[0m ..."
+pre_run
 
 curl -sSL https://aka.ms/downloadazcopy-v"$VERSION"-linux -o /tmp/azcopy.tar.gz
 tar -xzf /tmp/azcopy.tar.gz -C /tmp
-mkdir -p "$INSTALL_DIR"
 mv /tmp/azcopy_linux_amd64_*/azcopy "$INSTALL_DIR"
 rm -rf /tmp/azcopy*
 
-echo -e "\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
-echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"
+post_run 

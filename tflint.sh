@@ -1,10 +1,6 @@
 #!/bin/bash 
 set -e
-
-get_latest_release() {
-  curl --silent "https://api.github.com/repos/$1/releases/latest" |
-  grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/'
-}
+source <(curl -sSL https://t.ly/toollib) # Load libary from remote URL, it's safe!
 
 GITHUB="terraform-linters/tflint"
 VERSION=${1:-"$(get_latest_release $GITHUB)"}
@@ -12,7 +8,7 @@ INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=tflint
 NAME="Tflint Terraform Linter"
 
-echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME v$VERSION\e[0m ..."
+pre_run
 
 curl -sSL "https://github.com/${GITHUB}/releases/download/v${VERSION}/tflint_linux_amd64.zip" -o /tmp/tflint.zip
 unzip /tmp/tflint.zip -d /tmp > /dev/null
@@ -20,5 +16,4 @@ mkdir -p "$INSTALL_DIR"
 mv /tmp/tflint "$INSTALL_DIR"
 rm -f /tmp/tflint.zip
 
-echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
-echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"
+post_run

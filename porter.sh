@@ -1,12 +1,14 @@
 #!/bin/bash
 set -e
+source <(curl -sSL https://t.ly/toollib) # Load libary from remote URL, it's safe!
 
 CMD=porter
 NAME="Porter"
+VERSION="0.0"
+INSTALL_DIR="$HOME/.porter"
 
-echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME\e[0m ..."
+pre_run
 
-curl https://cdn.porter.sh/latest/install-linux.sh | bash
+curl -sSL https://cdn.porter.sh/latest/install-linux.sh | bash
 
-echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
-echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"
+post_run

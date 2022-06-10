@@ -3,15 +3,17 @@
 # All scripts should source this file
 
 get_latest_release() {
+  PREFIX="v"
+  if [[ $2 == "false" ]]; then PREFIX=""; fi
   curl --silent "https://api.github.com/repos/$1/releases/latest" |
-  grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/'
+  grep '"tag_name":' | sed -E "s/.*\"$PREFIX([^\"]+)\".*/\1/"
 }
 
 pre_run() {
   echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME \e[35mv$VERSION\e[0m ..."
   if [ -z "$INSTALL_DIR" ]; then return; fi
 
-  echo -e "\e[34m»»» 📂 \e[32mWill install into: \e[35m$INSTALL_DIR"
+  echo -e "\e[34m»»» 📂 \e[32mTarget directory for binary: \e[35m$INSTALL_DIR"
 
   if [[ :$PATH: == *:"$INSTALL_DIR":* ]] ; then
     echo -e "\e[34m»»» ✅ \e[32mPATH is good"
