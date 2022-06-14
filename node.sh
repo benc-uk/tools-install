@@ -1,5 +1,5 @@
 #!/bin/bash
-source <(curl -sSL https://t.ly/toollib) # Load libary from remote URL, it's safe!
+source <(curl -sSL s.benc.dev/lib) # Load libary from remote URL, it's safe!
 
 VERSION=${1:-"16"}
 CMD=node
