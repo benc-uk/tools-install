@@ -1,6 +1,6 @@
 #!/bin/bash 
 set -e
-source <(curl -sSL s.benc.dev/lib) # Load libary from remote URL, it's safe!
+source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
 
 GITHUB="kubernetes-sigs/cluster-api"
 VERSION=${1:-"$(get_latest_release $GITHUB)"}

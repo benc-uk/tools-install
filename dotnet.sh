@@ -1,6 +1,6 @@
 #!/bin/bash 
 set -e
-source <(curl -sSL s.benc.dev/lib) # Load libary from remote URL, it's safe!
+source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
 
 VERSION=${1:-"6.0"}
 CMD=dotnet

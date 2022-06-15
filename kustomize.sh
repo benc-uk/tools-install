@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-source <(curl -sSL s.benc.dev/lib) # Load libary from remote URL, it's safe!
+source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
 
 get_latest_release_kustomize() {
   curl -sSL https://api.github.com/repos/kubernetes-sigs/kustomize/releases | grep browser_download.*"linux"_"amd64" | cut -d '"' -f 4 | sort -V | tail -n 1 | cut -d/ -f 9 | cut -b 2-99
