@@ -3,7 +3,7 @@ set -e
 source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
 
 GITHUB="loophole/cli"
-VERSION=${1:-"$(get_latest_release $GITHUB false)"}
+VERSION=${1:-"$(get_latest_release $GITHUB "")"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=loophole
 NAME="Loophole"
