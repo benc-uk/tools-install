@@ -11,7 +11,7 @@ NAME="Bun.js"
 
 pre_run
 
-wget -q https://github.com/$GITHUB/releases/download/"${VERSION}"/bun-linux-x64.zip -O /tmp/bun.zip
+wget -q https://github.com/$GITHUB/releases/download/"bun-v${VERSION}"/bun-linux-x64.zip -O /tmp/bun.zip
 unzip -o /tmp/bun.zip -d /tmp > /dev/null
 mv /tmp/bun-linux-x64/bun "$INSTALL_DIR"
 rm -f /tmp/bun.zip
