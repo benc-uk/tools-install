@@ -3,7 +3,8 @@
 # All scripts should source this file
 
 get_latest_release() {
-  PREFIX=${2:-""}
+  if [ $# -lt 2 ]; then PREFIX="v"; else PREFIX=$2; fi
+
   curl --silent "https://api.github.com/repos/$1/releases/latest" |
   grep '"tag_name":' | sed -E "s/.*\"$PREFIX([^\"]+)\".*/\1/"
 }
