@@ -6,7 +6,7 @@ GITHUB="fluxcd/flux2"
 VERSION=${1:-"$(get_latest_release $GITHUB)"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=flux
-NAME="Flux v2"
+NAME="FluxCD v2"
 
 pre_run
 

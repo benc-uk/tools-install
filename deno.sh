@@ -2,7 +2,7 @@
 set -e
 
 CMD=deno
-NAME=Deno
+NAME="Deno JavaScript Runtime"
 
 echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME\e[0m ..."
 

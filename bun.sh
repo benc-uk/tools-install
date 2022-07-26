@@ -4,7 +4,6 @@ source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
 
 GITHUB="oven-sh/bun"
 VERSION=${1:-"$(get_latest_release $GITHUB "bun-v")"}
-echo "Installing  $VERSION "
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=bun
 NAME="Bun.js"

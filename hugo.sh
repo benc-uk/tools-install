@@ -6,7 +6,7 @@ GITHUB="gohugoio/hugo"
 VERSION=${1:-"$(get_latest_release $GITHUB)"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=hugo
-NAME="Hugo"
+NAME="Hugo Static Site Generator"
 
 pre_run
 

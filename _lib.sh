@@ -22,6 +22,8 @@ pre_run() {
     echo -e "\e[34m»»» 📢 \e[31mNOTE! Amend your shell startup scripts to make this change permanent:\n\t\e[37mexport PATH=\$PATH:$INSTALL_DIR"
     export PATH="$PATH:$INSTALL_DIR"
   fi
+
+  mkdir -p "$INSTALL_DIR"
 }
 
 post_run() {

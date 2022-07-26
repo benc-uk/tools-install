@@ -5,7 +5,7 @@ source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
 VERSION=${1:-"Latest"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=mkcert
-NAME=mkcert
+NAME="mkcert Cert Utility"
 
 pre_run
 

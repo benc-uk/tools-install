@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+NAME="Various Linux Utilities"
 
 # Basic base/core packages
 

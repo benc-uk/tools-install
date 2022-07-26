@@ -6,7 +6,7 @@ GITHUB="hashicorp/terraform"
 VERSION=${1:-"$(get_latest_release $GITHUB)"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=terraform
-NAME=Terraform
+NAME="Terraform"
 
 pre_run
 
