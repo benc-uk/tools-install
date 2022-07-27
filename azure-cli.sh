@@ -1,5 +1,6 @@
-#!/bin/bash 
+#!/bin/bash
 set -e
+source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
 
 CMD=az
 NAME="Azure CLI"
