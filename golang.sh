@@ -19,4 +19,6 @@ sudo rm -rf /usr/local/go
 rm -rf /tmp/golang.tar.gz
 sudo mv go /usr/local
 
+printf '\nexport PATH=$PATH:/usr/local/go/bin\n' >> ~/.bashrc 
+
 post_run version
