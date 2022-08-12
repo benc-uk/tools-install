@@ -1,5 +1,5 @@
 #!/bin/bash
-source <(curl -sSL s.benco.io/lib) # Load libary from remote URL, it's safe!
+source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
 
 VERSION=${1:-"16"}
 CMD=node
