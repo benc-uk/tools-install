@@ -1,7 +1,7 @@
 #!/bin/bash 
 set -e
 
-source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
+source <(curl -sSL s.benco.io/lib) # Load libary from remote URL, it's safe!
 
 GITHUB="lawrencegripper/azbrowse"
 VERSION=${1:-"$(get_latest_release $GITHUB)"}
