@@ -3,7 +3,7 @@ set -e
 source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
 
 get_latest_release() {
-  curl --silent "https://go.dev/dl/" | grep -Po -m 1 '(\d+\.\d+\.\d+)\.linux-amd64' | sed 's/.linux-amd64//'
+  curl --silent "https://go.dev/dl/" | grep -Po -m 1 '(\d+\.\d+\.\d+)\.linux-amd64.tar.gz"' | sed 's/.linux-amd64.tar.gz"//'
 }
 
 VERSION=${1:-"$(get_latest_release)"}
