@@ -11,5 +11,6 @@ NAME="Kind, run Kubernetes in Docker"
 pre_run
 
 curl -sSL https://github.com/$GITHUB/releases/download/v"${VERSION}"/kind-linux-amd64 -o "$INSTALL_DIR"/$CMD
+chmod +x "$INSTALL_DIR"/$CMD
 
 post_run
