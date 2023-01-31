@@ -10,7 +10,7 @@ NAME="k9s, a terminal based UI for Kubernetes"
 
 pre_run
 
-curl -sSL "https://github.com/$GITHUB/releases/download/v${VERSION}/k9s_Linux_x86_64.tar.gz" | \
+curl -sSL "https://github.com/$GITHUB/releases/download/v${VERSION}/k9s_Linux_amd64.tar.gz" | \
   tar -zx -C "$INSTALL_DIR" $CMD
 
 post_run version
