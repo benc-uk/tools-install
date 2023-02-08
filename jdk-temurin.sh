@@ -2,6 +2,9 @@
 set -e 
 source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
 
+# Eclipse Temurin is the open source Java SE build based upon OpenJDK and made available by Adoptium
+# See https://adoptium.net/en-GB/temurin/releases/
+
 CMD=java
 NAME="Java JDK (Temurin)"
 VERSION=${1:-"11"}
