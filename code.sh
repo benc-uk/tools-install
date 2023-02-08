@@ -4,7 +4,7 @@ source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
 
 VERSION=${1:-"stable"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
-CMD=code
+CMD=$INSTALL_DIR/code
 NAME=VS Code CLI
 
 pre_run
