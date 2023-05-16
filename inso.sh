@@ -10,8 +10,6 @@ NAME="Insomnia CLI"
 
 pre_run
 
-echo "$VERSION"
-
 curl -sSL "https://github.com/$GITHUB/releases/download/lib%40${VERSION}/inso-linux-${VERSION}.tar.xz" | \
     tar -xJ -C "$INSTALL_DIR" $CMD
 
