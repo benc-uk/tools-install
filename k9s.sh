@@ -6,7 +6,7 @@ GITHUB="derailed/k9s"
 VERSION=${1:-"$(get_latest_release $GITHUB)"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=k9s
-NAME="k9s, a terminal based UI for Kubernetes"
+NAME="k9s terminal UI for Kubernetes"
 
 pre_run
 

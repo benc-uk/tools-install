@@ -1,15 +1,15 @@
-# 📦 Tool Installers 🛠🧰
+# 📦🛠️🚀 Tool & Software Installers 
 
 This is a semi-personal, curated collection of setup scripts for tools, SDKs, dev kits and other things I might want on a new system or to install into a container.
 
-💬 **NOTE!** These will only work on Ubuntu or Debian systems.
+💬 **NOTE!** These have been designed only work on Ubuntu or Debian systems.
 
 They are standalone bash scripts & can be run at any time, and re-running them will just install the latest version in place.  
 Where possible the scripts pull binaries directly from the remote distribution source (mostly GitHub) or fall back to an 'official' remote setup script URL or failing that, use `apt`.
 
 The default binary install location is `$HOME/.local/bin` if this isn't in your PATH, it really should be, it's [the official place for putting user executables](https://www.freedesktop.org/software/systemd/man/file-hierarchy.html#Home%20Directory)
 
-The scripts accept two optional arguments version number (or tag) and install path. Running without arguments will try to find the latest version and install into `$HOME/.local/bin`
+The scripts accept two optional arguments version number (often a git tag) and install path. Running without arguments will try to find the latest version and install into `$HOME/.local/bin`
 
 Some examples:
 
@@ -23,6 +23,7 @@ Some scripts which install system wide components such as Docker or the Azure CL
 ## 📃 Script Index
 
 - **act.sh** - Nektos Act
+- **air.sh** - Air - Hot reloader for Go
 - **azbrowse.sh** - Azure Browse
 - **azcopy.sh** - Azure Copy
 - **azd.sh** - Azure Dev CLI
@@ -31,6 +32,7 @@ Some scripts which install system wide components such as Docker or the Azure CL
 - **bicep.sh** - Azure Bicep
 - **bun.sh** - Bun.js
 - **clusterctl.sh** - K8S Cluster API
+- **code.sh** - VS Code CLI
 - **dapr.sh** - Dapr CLI
 - **deno.sh** - Deno JavaScript Runtime
 - **devcontainer-cli.sh** - Dev Container CLI
@@ -43,9 +45,11 @@ Some scripts which install system wide components such as Docker or the Azure CL
 - **golangci-lint.sh** - Golang CI Lint
 - **helm.sh** - Helm
 - **hugo.sh** - Hugo Static Site Generator
-- **jdk.sh** - Java JDK (Temurin)
+- **inso.sh** - Insomnia CLI
+- **jdk-ms.sh** - Java JDK (OpenJDK Microsoft)
+- **jdk-temurin.sh** - Java JDK (Temurin)
 - **k6.sh** - k6 Load Testing
-- **k9s.sh** - k9s, a terminal based UI for Kubernetes
+- **k9s.sh** - k9s terminal UI for Kubernetes
 - **kind.sh** - Kind, run Kubernetes in Docker
 - **kube-tools.sh** - kubectx & kubens
 - **kubectl.sh** - Kubectl
