@@ -12,5 +12,5 @@ pre_run
 
 curl -sSL https://github.com/$GITHUB/releases/download/v"${VERSION}"/air_"${VERSION}"_linux_amd64 -o "$INSTALL_DIR"/$CMD
 chmod +x "$INSTALL_DIR"/$CMD
-
+ 
 post_run -v
