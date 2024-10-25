@@ -14,6 +14,7 @@ sudo apt-get install -y \
   git \
   wget \
   unzip \
+  fzf \
   apt-transport-https \
   lsb-release \
   gnupg \
