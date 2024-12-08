@@ -6,7 +6,7 @@ GITHUB="grafana/k6"
 VERSION=${1:-"$(get_latest_release $GITHUB)"}
 INSTALL_DIR=${2:-"$HOME/.local/bin"}
 CMD=k6
-NAME="k6 Load Testing"
+NAME="k6 Load Tester"
 
 pre_run
 
