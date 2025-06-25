@@ -14,5 +14,7 @@ pre_run
 
 sudo apt-get update -qq
 sudo apt-get install -y -qq dotnet-sdk-"$VERSION"
+sudo apt-get install -y -qq aspnetcore-runtime-"$VERSION"
+sudo apt-get install -y -qq dotnet-runtime-"$VERSION"
 
 post_run --version

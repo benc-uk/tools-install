@@ -1,7 +1,7 @@
 #!/bin/bash
 source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
 
-VERSION=${1:-"20"}
+VERSION=${1:-"22"}
 CMD=node
 NAME="Node.js"
 
