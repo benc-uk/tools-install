@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
+source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
 
 VERSION=${1:-"$(curl -L -s https://dl.k8s.io/release/stable.txt)"}
 VERSION=${VERSION:1} # Remove the leading 'v'

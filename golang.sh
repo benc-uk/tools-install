@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
+source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
 
 get_latest_release() {
   curl --silent "https://go.dev/dl/" | grep -Po -m 1 '(\d+\.\d+\.\d+)\.linux-amd64.tar.gz"' | sed 's/.linux-amd64.tar.gz"//'

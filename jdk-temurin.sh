@@ -1,6 +1,6 @@
 #!/bin/bash 
 set -e 
-source <(curl -sSL benco.io/lib) # Load libary from remote URL, it's safe!
+source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
 
 # Eclipse Temurin is the open source Java SE build based upon OpenJDK and made available by Adoptium
 # See https://adoptium.net/en-GB/temurin/releases/
