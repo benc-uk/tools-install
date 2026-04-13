@@ -1,7 +1,7 @@
 #!/bin/bash
 source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
 
-VERSION=${1:-"22"}
+VERSION=${1:-"24"}
 CMD=node
 NAME="Node.js"
 
