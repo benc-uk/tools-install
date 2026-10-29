@@ -12,7 +12,7 @@ require_commands apt-get gpg curl
 
 pre_run
 add_apt_repo azure-cli "https://packages.microsoft.com/keys/microsoft.asc" \
-  "deb [arch=$ARCH signed-by=/etc/apt/keyrings/azure-cli.gpg] https://packages.microsoft.com/repos/azure-cli/ $DISTRO_CODENAME main"
+  "https://packages.microsoft.com/repos/azure-cli/" "$DISTRO_CODENAME"
 apt_install azure-cli
 INSTALLED_CMD=/usr/bin/az
 post_run version

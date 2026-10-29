@@ -32,13 +32,23 @@ gpg() {
   printf 'fixture binary key\n' > "$WORK_DIR/fixture.gpg"
 }
 
+install_apt_source() {
+  [[ $2 == /etc/apt/sources.list.d/fixture.sources ]] || die "Unexpected source destination"
+  cp "$1" "$TEST_DIR/fixture.sources"
+}
+
 apt_install --allow-downgrades 'nodejs=24.*'
 grep -Fx 'apt-get update -qq' "$TEST_DIR/system-commands"
 grep -Fx 'apt-get install -y --allow-downgrades nodejs=24.*' "$TEST_DIR/system-commands"
 
-add_apt_repo fixture https://example.invalid/key \
-  'deb [arch=amd64 signed-by=/etc/apt/keyrings/fixture.gpg] https://example.invalid/repo stable main'
-grep -F 'signed-by=/etc/apt/keyrings/fixture.gpg' "$WORK_DIR/fixture.list"
+add_apt_repo fixture https://example.invalid/key https://example.invalid/repo stable
+printf 'Types: deb\nURIs: https://example.invalid/repo\nSuites: stable\nComponents: main\nArchitectures: amd64\nSigned-By: /etc/apt/keyrings/fixture.gpg\n' > "$TEST_DIR/expected.sources"
+cmp "$TEST_DIR/expected.sources" "$TEST_DIR/fixture.sources"
+ARCH=arm64
+add_apt_repo fixture https://example.invalid/key https://example.invalid/repo stable custom
+grep -Fx 'Architectures: arm64' "$TEST_DIR/fixture.sources"
+grep -Fx 'Components: custom' "$TEST_DIR/fixture.sources"
+ARCH=amd64
 grep -F 'install -m 0644' "$TEST_DIR/system-commands"
 
 DISTRO=debian

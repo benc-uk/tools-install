@@ -70,7 +70,7 @@ Individual binary replacement is not a transaction across multiple tools or apt 
 | [deno.sh](./deno.sh) | Preserves `~/.deno/bin` as its default destination |
 | [golang.sh](./golang.sh) | Exact release or latest; replaces `/usr/local/go`, no destination argument |
 | [rust.sh](./rust.sh) | Defaults to `stable`; accepts `beta`, `nightly` or an exact Rust version. Preserves `CARGO_HOME`/`RUSTUP_HOME`, no destination argument |
-| [node.sh](./node.sh) | Major apt channel, default `24`, no destination argument |
+| [node.sh](./node.sh) | Major apt channel, default `26`, no destination argument |
 | [dotnet.sh](./dotnet.sh) | Major.minor apt channel, default `10.0`; uses configured sources, no destination argument |
 | [functions.sh](./functions.sh) | Major apt channel, default `4`, no destination argument |
 | [jdk-ms.sh](./jdk-ms.sh) | JDK major apt channel, default `11`; package scripts may update Java alternatives |
@@ -86,7 +86,9 @@ Exact release support depends on the assets that upstream still publishes. Remai
 
 NodeSource, Docker, Azure CLI and JDK package setup is explicit, using scoped signing keys rather than streamed setup scripts or `apt-key`. Microsoft package-feed configuration uses its official distro-specific `.deb`.
 
-Existing conflicting `.sources` configuration is reported for manual reconciliation rather than silently deleted. Package managers and their package scripts can still modify system configuration and services.
+NodeSource, Docker and Azure CLI use deb822 `.sources` files, supported on both Ubuntu 24.04 and 26.04. Each installer manages only its named vendor files in `/etc/apt/sources.list.d/` (for example, `nodesource.sources` and `nodesource.list`). Existing differing configuration is copied to `.bak` before replacement; older backups are retained with numbered suffixes. The legacy `.list` is removed only after the new `.sources` is installed, avoiding duplicate entries under those names. Unchanged reruns do not create more backups.
+
+Unrelated source files and existing signing keys at other paths are left alone. Symlinks and other non-regular source files are rejected for manual review. If the same repository was configured under a different filename, reconcile that separate entry manually. Package managers and their package scripts can still modify system configuration and services.
 
 Docker group membership is a manual step: the script prints the command and does not grant root-equivalent group access automatically.
 

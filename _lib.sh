@@ -247,17 +247,45 @@ apt_install() {
   as_root apt-get install -y "$@"
 }
 
+install_apt_source() {
+  local source=$1 target=$2 file staged
+  [[ $target == *.sources ]] || die "Expected a .sources destination: $target"
+  local legacy=${target%.sources}.list
+  for file in "$target" "$legacy"; do
+    if [[ -e $file || -L $file ]]; then
+      [[ -f $file && ! -L $file ]] || die "Refusing to replace non-regular repository configuration: $file"
+    fi
+  done
+  for file in "$target" "$legacy"; do
+    if [[ -f $file ]]; then
+      if [[ $file == "$target" ]] && cmp -s -- "$source" "$target"; then continue; fi
+      as_root cp --backup=numbered --preserve=mode,timestamps -- "$file" "$file.bak" ||
+        die "Could not back up repository configuration: $file"
+      log "Backed up repository configuration: $file.bak"
+    fi
+  done
+  staged=$(as_root mktemp "${target}.XXXXXX") || die "Could not stage repository configuration: $target"
+  if ! as_root install -m 0644 -- "$source" "$staged" || ! as_root mv -fT -- "$staged" "$target"; then
+    as_root rm -f -- "$staged"
+    die "Could not install repository configuration: $target"
+  fi
+  if [[ -f $legacy ]]; then
+    as_root rm -- "$legacy" || die "Could not retire legacy repository configuration: $legacy"
+    log "Replaced legacy repository configuration: $legacy"
+  fi
+}
+
 add_apt_repo() {
-  local name=$1 key_url=$2 entry=$3
+  local name=$1 key_url=$2 uri=$3 suite=$4 component=${5:-main}
+  [[ $name =~ ^[a-z0-9][a-z0-9-]*$ ]] || die "Invalid repository name: $name"
   require_commands gpg
-  [[ ! -e /etc/apt/sources.list.d/$name.sources ]] ||
-    die "Existing $name.sources must be reconciled with $name.list before installing"
   download "$key_url" "$WORK_DIR/$name.asc"
   gpg --batch --yes --dearmor --output "$WORK_DIR/$name.gpg" "$WORK_DIR/$name.asc"
-  printf '%s\n' "$entry" > "$WORK_DIR/$name.list"
-  as_root install -d -m 0755 /etc/apt/keyrings
+  printf 'Types: deb\nURIs: %s\nSuites: %s\nComponents: %s\nArchitectures: %s\nSigned-By: /etc/apt/keyrings/%s.gpg\n' \
+    "$uri" "$suite" "$component" "$ARCH" "$name" > "$WORK_DIR/$name.sources"
+  as_root install -d -m 0755 /etc/apt/keyrings /etc/apt/sources.list.d
   as_root install -m 0644 "$WORK_DIR/$name.gpg" "/etc/apt/keyrings/$name.gpg"
-  as_root install -m 0644 "$WORK_DIR/$name.list" "/etc/apt/sources.list.d/$name.list"
+  install_apt_source "$WORK_DIR/$name.sources" "/etc/apt/sources.list.d/$name.sources"
 }
 
 microsoft_repo() {

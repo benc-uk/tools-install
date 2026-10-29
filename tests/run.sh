@@ -211,6 +211,10 @@ assert_contains "$TEST_DIR/output" "Required command not found: jq"
 expect_failure bash -c 'source "$ROOT/_lib.sh"; NAME=Fixture; init_binary latest; pre_run; kill -TERM "$$"'
 assert_clean
 bash "$ROOT/tests/system.sh" > "$TEST_DIR/system-output"
+bash "$ROOT/tests/apt-sources.sh" > "$TEST_DIR/apt-sources-output" 2>&1 || {
+  cat "$TEST_DIR/apt-sources-output" >&2
+  fail "Apt repository migration tests failed"
+}
 assert_clean
 
 # Exported mocks are invoked by the child installer shell.

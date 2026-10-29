@@ -12,7 +12,7 @@ require_commands apt-get gpg curl
 
 pre_run
 add_apt_repo docker "https://download.docker.com/linux/$DISTRO/gpg" \
-  "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$DISTRO $DISTRO_CODENAME stable"
+  "https://download.docker.com/linux/$DISTRO" "$DISTRO_CODENAME" stable
 apt_install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 INSTALLED_CMD=/usr/bin/docker
 post_run
