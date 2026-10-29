@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 export ROOT
-for dependency in jq zip unzip zstd shellcheck; do
+for dependency in jq zip unzip zstd shellcheck script; do
   command -v "$dependency" >/dev/null || { printf 'Missing test dependency: %s\n' "$dependency" >&2; exit 1; }
 done
 TEST_DIR=$(mktemp -d)
@@ -44,7 +44,7 @@ check_binary() {
   local script=$1 command=$2 version=$3 url=$4 member=$5 format=$6 arguments=$7
   local companion=${8:-}
   export MOCK_DOWNLOAD=$url MOCK_MEMBER=$member MOCK_FORMAT=$format
-  bash "$ROOT/$script.sh" "$version" "$TEST_DIR/custom bin" > "$TEST_DIR/output"
+  bash "$ROOT/$script.sh" "$version" "$TEST_DIR/custom bin" > "$TEST_DIR/output" 2> "$TEST_DIR/diagnostics"
   assert_contains "$TEST_DIR/requests" "$url"
   assert_contains "$TEST_DIR/output" "fixture $arguments"
   [[ -x "$TEST_DIR/custom bin/$command" ]] || fail "$script did not install an executable"
@@ -151,7 +151,7 @@ unset MOCK_DOWNLOAD_ALT MOCK_MEMBER_ALT MOCK_SECOND_FAILURE
 cp "$ROOT/tests/fixtures/deny" "$TEST_DIR/mock/bicep"
 chmod +x "$TEST_DIR/mock/bicep"
 check_binary bicep bicep 1.2.3 "https://github.com/Azure/bicep/releases/download/v1.2.3/bicep-linux-x64" binary raw --version
-assert_contains "$TEST_DIR/output" "PATH currently selects"
+assert_contains "$TEST_DIR/diagnostics" "PATH currently selects"
 
 printf 'previous installation\n' > "$TEST_DIR/custom bin/bicep"
 export MOCK_FAILURE=http
@@ -211,6 +211,7 @@ assert_contains "$TEST_DIR/output" "Required command not found: jq"
 expect_failure bash -c 'source "$ROOT/_lib.sh"; NAME=Fixture; init_binary latest; pre_run; kill -TERM "$$"'
 assert_clean
 bash "$ROOT/tests/system.sh" > "$TEST_DIR/system-output"
+bash "$ROOT/tests/output.sh"
 bash "$ROOT/tests/apt-sources.sh" > "$TEST_DIR/apt-sources-output" 2>&1 || {
   cat "$TEST_DIR/apt-sources-output" >&2
   fail "Apt repository migration tests failed"

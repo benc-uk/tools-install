@@ -17,5 +17,5 @@ apt_install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-co
 INSTALLED_CMD=/usr/bin/docker
 post_run
 log "Optional: sudo usermod -aG docker \"\$USER\", then start a new login session."
-log "The docker group grants root-equivalent access. It has not been changed."
+warn "The docker group grants root-equivalent access. It has not been changed."
 log "On WSL, use systemd where enabled, or start Docker with sudo service docker start."

@@ -15,6 +15,6 @@ jobs:
       - name: Install test dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y shellcheck jq curl unzip zip xz-utils zstd
+          sudo apt-get install -y shellcheck jq curl unzip zip xz-utils zstd bsdutils
       - name: Syntax, lint and offline regression tests
         run: bash tests/check.sh

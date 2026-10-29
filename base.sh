@@ -15,4 +15,4 @@ PACKAGES=(
 )
 apt_install "${PACKAGES[@]}"
 dpkg-query -W -f='${Package} ${Version} ${Status}\n' "${PACKAGES[@]}"
-log "Installed $NAME"
+success "Installed $NAME"

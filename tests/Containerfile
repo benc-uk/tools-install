@@ -1,6 +1,6 @@
 FROM ubuntu:24.04
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    bash ca-certificates curl jq shellcheck tar unzip zip xz-utils zstd git gnupg libicu74 \
+    bash bsdutils ca-certificates curl jq shellcheck tar unzip zip xz-utils zstd git gnupg libicu74 \
     && apt-get clean
 WORKDIR /installers
 COPY *.sh ./

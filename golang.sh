@@ -23,13 +23,13 @@ cleanup_go() {
   if [[ -n $GO_STAGE ]]; then
     if [[ -e $GO_STAGE/previous && ! -e /usr/local/go ]]; then
       as_root mv -T "$GO_STAGE/previous" /usr/local/go || {
-        printf 'Error: restore the previous SDK from %s/previous\n' "$GO_STAGE" >&2
+        error "Restore the previous SDK from $GO_STAGE/previous"
         cleanup
         return 1
       }
     fi
     if [[ -e $GO_STAGE/previous ]]; then
-      printf 'Previous SDK retained at %s/previous\n' "$GO_STAGE" >&2
+      warn "Previous SDK retained at $GO_STAGE/previous"
     else
       as_root rm -rf -- "$GO_STAGE"
     fi

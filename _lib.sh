@@ -7,16 +7,24 @@ NAME=""
 CMD=""
 STAGED_FILES=()
 
-log() {
-  if [[ -t 1 && -z ${NO_COLOR+x} ]]; then
-    printf '\033[32m>>\033[0m %s\n' "$*"
+_print_status() {
+  local colour=$1 icon=$2 prefix=$3
+  shift 3
+  if [[ -t 1 && -z ${NO_COLOR+x} && ${TERM:-dumb} != dumb ]]; then
+    if [[ $prefix == ">>" ]]; then prefix=""; else prefix+=" "; fi
+    printf '\033[%sm%s %s%s\033[0m\n' "$colour" "$icon" "$prefix" "$*"
   else
-    printf '>> %s\n' "$*"
+    printf '%s %s\n' "$prefix" "$*"
   fi
 }
 
+log() { _print_status 36 "ℹ️" ">>" "$@"; }
+success() { _print_status 32 "✅" ">>" "$@"; }
+warn() { _print_status 33 "⚠️" "WARNING:" "$@" >&2; }
+error() { _print_status 31 "❌" "Error:" "$@" >&2; }
+
 die() {
-  printf 'Error: %s\n' "$*" >&2
+  error "$@"
   exit 1
 }
 
@@ -164,8 +172,8 @@ github_asset() {
 
 pre_run() {
   WORK_DIR=$(mktemp -d)
-  log "Installing $NAME${VERSION:+ ($VERSION)}"
-  if [[ -n $INSTALL_DIR ]]; then log "Target: $INSTALL_DIR"; fi
+  _print_status "1;35" "📦" ">>" "Installing $NAME${VERSION:+ ($VERSION)}"
+  if [[ -n $INSTALL_DIR ]]; then _print_status 34 "📂" ">>" "Target: $INSTALL_DIR"; fi
 }
 
 unpack() {
@@ -225,17 +233,21 @@ post_run() {
     printf '%s\n' "$output" >&2
     die "Version check failed for $target"
   fi
-  log "Installed: $target"
+  success "Installed: $target"
   printf '%s\n' "$output"
   if [[ -n $INSTALL_DIR ]]; then
     case :$PATH: in
       *:"$INSTALL_DIR":*) ;;
-      *) printf "Add to your shell profile: export PATH=%q:\"\$PATH\"\n" "$INSTALL_DIR" ;;
+      *)
+        local instruction
+        printf -v instruction "Add to your shell profile: export PATH=%q:\"\$PATH\"" "$INSTALL_DIR"
+        _print_status 33 "💡" ">>" "$instruction"
+        ;;
     esac
     local found
     found=$(command -v "$CMD" || true)
     if [[ -n $found && $found != "$target" ]]; then
-      log "Note: PATH currently selects $found instead"
+      warn "PATH currently selects $found instead"
     fi
   fi
 }

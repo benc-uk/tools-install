@@ -10,8 +10,8 @@ init_system "" "$@"
 require_commands apt-get dpkg
 
 if DOCKER_CMD=$(command -v docker); then
-  printf 'WARNING: An existing docker command was found at %s (possibly an existing Podman shim).\n' "$DOCKER_CMD" >&2
-  printf 'The Podman shim provides /usr/bin/docker and may conflict with Docker packages or be shadowed on PATH.\n' >&2
+  warn "An existing docker command was found at $DOCKER_CMD (possibly an existing Podman shim)."
+  warn "The Podman shim provides /usr/bin/docker and may conflict with Docker packages or be shadowed on PATH."
 fi
 log "Apt will refuse to remove packages. Resolve any Docker package conflicts manually before retrying."
 

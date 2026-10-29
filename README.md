@@ -55,7 +55,8 @@ These installers accept `[version] [install-dir]`, defaulting to the latest rele
 - Temporary files are cleaned up on success, failure and interruption.
 - Version checks run the intended installed executable, not an older copy found on PATH. A failed version check is an error, not a successful installation.
 - PATH guidance is printed when needed. The scripts do not edit shell profiles or change the login shell.
-- Output is plain when redirected; terminal colour respects `NO_COLOR`.
+- Shared status messages use coloured emoji in terminals: a purple package for installation, a blue folder for the destination, green success, yellow warnings and red errors. Warnings and errors go to stderr.
+- Redirected streams stay plain ASCII. Setting `NO_COLOR` (even to an empty value), or using `TERM=dumb`, disables both colour and emoji. Output from upstream tools and package managers is left unchanged.
 
 **Downloaded binary checksums and signatures are not verified in this phase.** HTTPS and staging are not a guarantee of authenticity. Only run a checkout and upstream distributions you trust.
 
@@ -106,6 +107,8 @@ Rust deliberately delegates to the official **rustup-init executable**, download
 
 Agent guidance for creating, updating and maintaining installers is in [AGENTS.md](./AGENTS.md). Use a similar existing installer as a reference rather than a template. Keep tool-specific URL, architecture and archive rules in the installer; put genuinely repeated operations in [_lib.sh](./_lib.sh).
 
+Use the shared `log`, `success`, `warn` and `die` helpers for consistent output. `error` reports an error without exiting, for cleanup paths that must finish before returning a failure. Do not embed colour escapes or emoji in individual installers.
+
 Generate the index below with `./_list.sh`.
 
 Run syntax, ShellCheck and offline regression tests:
@@ -114,7 +117,7 @@ Run syntax, ShellCheck and offline regression tests:
 bash tests/check.sh
 ```
 
-Test dependencies are `shellcheck`, `jq`, `curl`, `tar`, `zip`, `unzip`, `xz` and `zstd`. The tests use fixtures, deny unexpected external commands, and never install tools into your real home or system directories. They cover both architecture mappings, help, argument handling, downloads, archive formats, safe replacement and failure cleanup.
+Test dependencies are `shellcheck`, `jq`, `curl`, `tar`, `zip`, `unzip`, `xz`, `zstd` and `script` (from `bsdutils`). The tests use fixtures, deny unexpected external commands, and never install tools into your real home or system directories. They cover both architecture mappings, help, argument handling, downloads, archive formats, safe replacement, failure cleanup and real pseudo-terminal output.
 
 To avoid installing test dependencies on your host, use the disposable Ubuntu image:
 
