@@ -37,7 +37,7 @@ Missing prerequisites are reported, not automatically bootstrapped. A system pac
 
 Ordinary binary installers do not use sudo. System installers use root directly, or sudo when necessary. [mkcert.sh](./mkcert.sh) also installs `libnss3-tools` explicitly.
 
-[base.sh](./base.sh) includes `ca-certificates`, `xz-utils`, `zstd` and `zip`, plus ripgrep (`rg`) and fd (`fdfind`, from the Debian/Ubuntu `fd-find` package). It does not create an `fd` alias.
+[base.sh](./base.sh) includes `ca-certificates`, `xz-utils`, `zstd` and `zip`, plus ripgrep (`rg`), fd (`fdfind`, from the Debian/Ubuntu `fd-find` package) and `htop`. It does not create an `fd` alias.
 
 ## Utility installers
 
@@ -45,6 +45,7 @@ Ordinary binary installers do not use sudo. System installers use root directly,
 - [age.sh](./age.sh) installs `age` and `age-keygen` for file encryption. It does not install the optional bundled tools/plugins, generate keys or configure SOPS.
 - [uv.sh](./uv.sh) installs `uv` and `uvx` for Python package and tool management. It does not install a Python interpreter or modify shell profiles.
 - [copilot.sh](./copilot.sh) installs the standalone GitHub Copilot CLI from official release binaries, without Node.js, npm or the old `gh copilot` extension. Start `copilot` and enter `/login` yourself; using it requires a GitHub account with Copilot CLI access.
+- [edit.sh](./edit.sh) resolves the latest release through GitHub's public release redirect, without GitHub API access or authentication. It downloads `.tar.gz` releases for v2 onward and `.tar.zst` for the supported v1 releases. Edit optionally uses ICU for Search and Replace.
 
 These installers accept `[version] [install-dir]`, defaulting to the latest release and `$HOME/.local/bin`.
 

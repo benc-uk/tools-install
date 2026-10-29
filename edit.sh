@@ -8,8 +8,16 @@ CMD=edit
 GITHUB="microsoft/edit"
 init_binary "latest" "$@"
 PLATFORM=$(asset_arch x86_64 aarch64)
+if [[ $VERSION == latest ]]; then
+  RELEASE_URL=$(fetch "https://github.com/$GITHUB/releases/latest" --head --output /dev/null --write-out '%{url_effective}')
+  [[ $RELEASE_URL == "https://github.com/$GITHUB/releases/tag/v"* ]] ||
+    die "Cannot resolve latest release of $GITHUB"
+  VERSION=${RELEASE_URL##*/}
+fi
 VERSION=$(github_version "$GITHUB" "$VERSION")
-URL=$(github_asset "$GITHUB" "v$VERSION" "edit-$VERSION-$PLATFORM-linux-gnu.tar.gz" "edit-$VERSION-$PLATFORM-linux-gnu.tar.zst")
+FORMAT=tar.gz
+if [[ $VERSION == 1.* ]]; then FORMAT=tar.zst; fi
+URL="https://github.com/$GITHUB/releases/download/v$VERSION/edit-$VERSION-$PLATFORM-linux-gnu.$FORMAT"
 require_commands tar
 if [[ $URL == *.zst ]]; then require_commands zstd; fi
 

@@ -11,7 +11,7 @@ require_commands apt-get dpkg-query
 pre_run
 PACKAGES=(
   jq curl make git wget unzip fzf apt-transport-https lsb-release gnupg shellcheck ncdu hey figlet
-  ca-certificates xz-utils zstd zip ripgrep fd-find
+  ca-certificates xz-utils zstd zip ripgrep fd-find htop
 )
 apt_install "${PACKAGES[@]}"
 dpkg-query -W -f='${Package} ${Version} ${Status}\n' "${PACKAGES[@]}"

@@ -82,7 +82,16 @@ for MOCK_ARCH in x86_64 aarch64; do
   check_binary just just 1.2.3 "https://github.com/casey/just/releases/download/1.2.3/just-1.2.3-$triple-unknown-linux-musl.tar.gz" just tar.gz --version
   check_binary gh gh 1.2.3 "https://github.com/cli/cli/releases/download/v1.2.3/gh_1.2.3_linux_$arch.tar.gz" "gh_1.2.3_linux_$arch/bin/gh" tar.gz --version
   check_binary opa opa 1.2.3 "https://github.com/open-policy-agent/opa/releases/download/v1.2.3/opa_linux_$arch" binary raw version
-  check_binary edit edit 1.2.3 "https://github.com/microsoft/edit/releases/download/v1.2.3/edit-1.2.3-$triple-linux-gnu.tar.zst" edit tar.zst --version
+  : > "$TEST_DIR/requests"
+  export MOCK_FAILURE=api MOCK_TAG=v2.0.0
+  check_binary edit edit "" "https://github.com/microsoft/edit/releases/download/v2.0.0/edit-2.0.0-$triple-linux-gnu.tar.gz" edit tar.gz --version
+  assert_contains "$TEST_DIR/requests" "https://github.com/microsoft/edit/releases/latest"
+  check_binary edit edit latest "$MOCK_DOWNLOAD" edit tar.gz --version
+  check_binary edit edit 2.0.0 "$MOCK_DOWNLOAD" edit tar.gz --version
+  check_binary edit edit v2.0.0 "$MOCK_DOWNLOAD" edit tar.gz --version
+  check_binary edit edit 1.2.0 "https://github.com/microsoft/edit/releases/download/v1.2.0/edit-1.2.0-$triple-linux-gnu.tar.zst" edit tar.zst --version
+  if grep -F 'https://api.github.com/' "$TEST_DIR/requests" >/dev/null; then fail "Edit used the GitHub API"; fi
+  export MOCK_FAILURE="" MOCK_TAG=v1.2.3
   check_binary deno deno 1.2.3 "https://github.com/denoland/deno/releases/download/v1.2.3/deno-$triple-unknown-linux-gnu.zip" deno zip --version
   check_binary azd azd stable "https://azuresdkartifacts.z5.web.core.windows.net/azd/standalone/release/stable/azd-linux-$arch.tar.gz" "azd-linux-$arch" tar.gz version
   [[ -L "$TEST_DIR/custom bin/azd" ]] || fail "azd layout not preserved"
@@ -113,6 +122,21 @@ for MOCK_ARCH in x86_64 aarch64; do
 done
 
 export MOCK_ARCH=x86_64 MOCK_FORMAT=tar.gz
+export MOCK_TAG=v2.0.0 MOCK_MEMBER=edit
+export MOCK_DOWNLOAD=https://github.com/microsoft/edit/releases/download/v2.0.0/edit-2.0.0-x86_64-linux-gnu.tar.gz
+printf 'previous installation\n' > "$TEST_DIR/custom bin/edit"
+for MOCK_FAILURE in redirect http archive; do
+  export MOCK_FAILURE
+  expect_failure bash "$ROOT/edit.sh" latest "$TEST_DIR/custom bin"
+  assert_contains "$TEST_DIR/custom bin/edit" "previous installation"
+  assert_clean
+done
+export MOCK_FAILURE=http
+expect_failure bash "$ROOT/edit.sh" 2.0.0 "$TEST_DIR/custom bin"
+assert_contains "$TEST_DIR/output" "Download failed: $MOCK_DOWNLOAD"
+assert_contains "$TEST_DIR/custom bin/edit" "previous installation"
+assert_clean
+export MOCK_FAILURE="" MOCK_TAG=v1.2.3
 for tool in age uv; do
   if [[ $tool == age ]]; then
     export MOCK_DOWNLOAD=https://github.com/FiloSottile/age/releases/download/v1.2.3/age-v1.2.3-linux-amd64.tar.gz MOCK_MEMBER=age/age
@@ -223,7 +247,24 @@ bash "$ROOT/tests/apt-sources.sh" > "$TEST_DIR/apt-sources-output" 2>&1 || {
 assert_clean
 
 # Exported mocks are invoked by the child installer shell.
-# shellcheck disable=SC2317
+# shellcheck disable=SC2317,SC2329
+(
+  dpkg() { printf 'amd64\n'; }
+  apt-get() { printf '%s\n' "$@" >> "$TEST_DIR/base-apt"; }
+  dpkg-query() { printf '%s\n' "$@" >> "$TEST_DIR/base-query"; }
+  sudo() {
+    [[ ${1:-} == -- && ${2:-} == apt-get ]] || return 1
+    shift 2
+    apt-get "$@"
+  }
+  export -f dpkg apt-get dpkg-query sudo
+  bash "$ROOT/base.sh" > "$TEST_DIR/output"
+  grep -Fx htop "$TEST_DIR/base-apt" >/dev/null || fail "Base install did not request htop"
+  grep -Fx htop "$TEST_DIR/base-query" >/dev/null || fail "Base install did not query htop"
+  assert_clean
+)
+
+# shellcheck disable=SC2317,SC2329
 (
   docker() { printf 'The existing Docker CLI must not be executed by the installer\n' >&2; return 1; }
   dpkg() {

@@ -9,7 +9,14 @@ while (($#)); do
   shift
 done
 printf '%s\n' "$url" >> "$TEST_DIR/requests"
+if [[ $url == https://github.com/microsoft/edit/releases/latest ]]; then
+  if [[ ${MOCK_FAILURE:-} == http ]]; then exit 22; fi
+  if [[ ${MOCK_FAILURE:-} == redirect ]]; then printf '%s' "$url"; exit; fi
+  printf 'https://github.com/microsoft/edit/releases/tag/%s' "${MOCK_TAG:-v2.0.0}"
+  exit
+fi
 if [[ -n $output ]]; then exec > "$output"; fi
+if [[ ${MOCK_FAILURE:-} == api && $url == https://api.github.com/* ]]; then exit 22; fi
 if [[ ${MOCK_FAILURE:-} == http ]]; then
   printf 'partial download'
   exit 22
