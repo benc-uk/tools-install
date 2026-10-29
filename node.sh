@@ -5,9 +5,9 @@ source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
 NAME="Node.js"
 CMD=node
-VERSION_USAGE="major release channel, for example 24 (not an exact patch version)"
+VERSION_USAGE="major release channel, for example 26 (not an exact patch version)"
 INSTALL_NOTES="Configures the NodeSource apt repository; installs Node.js and its bundled npm."
-init_system "24" "$@"
+init_system "26" "$@"
 [[ $VERSION =~ ^[0-9]+$ ]] || die "Expected a Node.js major release number"
 require_commands apt-get gpg curl
 
