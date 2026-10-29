@@ -1,0 +1,69 @@
+#!/bin/bash
+set -euo pipefail
+url="" output=""
+while (($#)); do
+  case $1 in
+    --output) output=$2; shift ;;
+    https://*) url=$1 ;;
+  esac
+  shift
+done
+printf '%s\n' "$url" >> "$TEST_DIR/requests"
+if [[ -n $output ]]; then exec > "$output"; fi
+if [[ ${MOCK_FAILURE:-} == http ]]; then
+  printf 'partial download'
+  exit 22
+fi
+case $url in
+  https://api.github.com/repos/*/releases/latest)
+    if [[ ${MOCK_FAILURE:-} == json ]]; then printf 'not JSON'; exit; fi
+    jq -n --arg tag "${MOCK_TAG:-v1.2.3}" '{tag_name:$tag}'
+    exit
+    ;;
+  https://api.github.com/repos/*/releases/tags/*)
+    jq -n --arg url "$MOCK_DOWNLOAD" --arg name "${MOCK_DOWNLOAD##*/}" \
+      '{assets:[{name:$name,browser_download_url:$url}]}'
+    exit
+    ;;
+  https://api.github.com/repos/*/releases\?*)
+    if [[ ${MOCK_PAGINATE:-} == yes && $url == *'page=1' ]]; then
+      jq -n '[range(100) | {tag_name:"edge-1",draft:false,prerelease:false}]'
+      exit
+    fi
+    jq -n --arg tag "${MOCK_TAG:-stable-1.2.3}" '[{tag_name:$tag,draft:false,prerelease:false}]'
+    exit
+    ;;
+  https://dl.k8s.io/release/stable.txt) printf 'v1.2.3\n'; exit ;;
+esac
+[[ $url == "$MOCK_DOWNLOAD" || $url == "${MOCK_DOWNLOAD_ALT:-}" ]] || {
+  printf 'Unexpected test URL: %s (expected %s)\n' "$url" "$MOCK_DOWNLOAD" >&2
+  exit 1
+}
+if [[ ${MOCK_FAILURE:-} == archive ]]; then printf 'not an archive'; exit; fi
+
+archive=$(mktemp -d "$TEST_DIR/archive.XXXXXX")
+member=${MOCK_MEMBER:-binary}
+if [[ $url == "${MOCK_DOWNLOAD_ALT:-}" ]]; then
+  if [[ ${MOCK_SECOND_FAILURE:-} == yes ]]; then exit 22; fi
+  member=$MOCK_MEMBER_ALT
+fi
+mkdir -p "$archive/$(dirname -- "$member")"
+cat > "$archive/$member" <<'BINARY'
+#!/bin/bash
+if [[ ${MOCK_FAILURE:-} == version ]]; then exit 42; fi
+printf 'fixture %s\n' "$*"
+BINARY
+members=("$member")
+if [[ -n ${MOCK_EXTRA_MEMBER:-} ]]; then
+  mkdir -p "$archive/$(dirname -- "$MOCK_EXTRA_MEMBER")"
+  cp "$archive/$member" "$archive/$MOCK_EXTRA_MEMBER"
+  members+=("$MOCK_EXTRA_MEMBER")
+fi
+case ${MOCK_FORMAT:-raw} in
+  raw) cat "$archive/$member" ;;
+  tar.gz) tar -czf - -C "$archive" "${members[@]}" ;;
+  tar.xz) tar -cJf - -C "$archive" "${members[@]}" ;;
+  tar.zst) tar --zstd -cf - -C "$archive" "${members[@]}" ;;
+  zip) (cd "$archive"; zip -q - "${members[@]}") ;;
+  *) printf 'Unexpected fixture format\n' >&2; exit 1 ;;
+esac

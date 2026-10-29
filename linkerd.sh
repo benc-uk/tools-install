@@ -1,21 +1,17 @@
 #!/bin/bash
-set -e
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-get_latest_release_linkerd() {
-  curl --silent "https://api.github.com/repos/$1/releases" |
-  grep -Po -m 1 '"tag_name": "stable-([\d.]+)"' | sed -E 's/.*"stable-([^"]+)".*/\1/'
-}
-
-GITHUB="linkerd/linkerd2"
-VERSION=${1:-"$(get_latest_release_linkerd $GITHUB)"}
-INSTALL_DIR=${2:-"$HOME/.local/bin"}
-CMD=linkerd
 NAME="Linkerd Service Mesh"
+CMD=linkerd
+GITHUB="linkerd/linkerd2"
+VERSION_USAGE="stable release version or latest stable (never edge)"
+init_binary "latest" "$@"
+if [[ $VERSION == latest ]]; then VERSION=$(github_latest_matching "$GITHUB" "stable-"); fi
+VERSION=$(github_version "$GITHUB" "$VERSION" stable-)
 
 pre_run
-
-curl -sSL https://github.com/linkerd/linkerd2/releases/download/stable-"${VERSION}"/linkerd2-cli-stable-"${VERSION}"-linux-amd64 -o "$INSTALL_DIR"/linkerd
-chmod +x "$INSTALL_DIR"/linkerd
-
+download "https://github.com/$GITHUB/releases/download/stable-$VERSION/linkerd2-cli-stable-$VERSION-linux-$ARCH" "$WORK_DIR/$CMD"
+install_binary "$WORK_DIR/$CMD"
 post_run version --client

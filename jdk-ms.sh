@@ -1,23 +1,19 @@
-#!/bin/bash 
-set -e 
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+#!/bin/bash
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-# The Microsoft Build of OpenJDK
-# See https://learn.microsoft.com/en-us/java/openjdk/overview
-
-CMD=java
 NAME="Java JDK (OpenJDK Microsoft)"
-VERSION=${1:-"11"} # Either 11 or 17
+CMD=java
+VERSION_USAGE="JDK major package channel, for example 11 or 21"
+INSTALL_NOTES="Uses Microsoft's apt feed; package scripts may update Java alternatives."
+init_system "25" "$@"
+[[ $VERSION =~ ^[0-9]+$ ]] || die "Expected a JDK major release number"
+require_commands apt-get dpkg-query
 
 pre_run
-
-# Download the Microsoft repository GPG keys
-wget -q https://packages.microsoft.com/config/ubuntu/"$(lsb_release -rs)"/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
-# Register the Microsoft repository GPG keys
-sudo dpkg -i /tmp/packages-microsoft-prod.deb
-rm -f /tmp/packages-microsoft-prod.deb
-
-sudo apt-get update -qq
-sudo apt-get install msopenjdk-"$VERSION"
-
-post_run --version
+microsoft_repo
+apt_install "msopenjdk-$VERSION"
+INSTALLED_CMD=$(dpkg-query -L "msopenjdk-$VERSION" | grep '/bin/java$')
+[[ $INSTALLED_CMD == /* && $INSTALLED_CMD != *$'\n'* ]] || die "Cannot identify the installed JDK executable"
+post_run -version

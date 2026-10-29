@@ -1,9 +1,9 @@
 #!/bin/bash
+set -euo pipefail
+DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 
-# loop through all .sh files
-for f in ./[a-z]*.*; do 
-  name=$(grep 'NAME=".*"' "$f")
-
-  name=${name:6:-1}
-    echo "- **${f:2}** - $name"
+for script in "$DIR"/[a-z]*.sh; do
+  name=$(sed -n 's/^NAME="\([^"]*\)"$/\1/p' "$script")
+  [[ -n $name ]] || { printf 'Missing NAME in %s\n' "$script" >&2; exit 1; }
+  printf -- '- [%s](./%s) - %s\n' "${script##*/}" "${script##*/}" "$name"
 done

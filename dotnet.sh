@@ -1,20 +1,17 @@
-#!/bin/bash 
-set -e
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+#!/bin/bash
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-VERSION=${1:-"8.0"}
-CMD=dotnet
 NAME="Dotnet SDK"
+CMD=dotnet
+VERSION_USAGE="SDK major.minor channel, for example 10.0"
+INSTALL_NOTES="Uses configured apt sources; on Debian, configure a suitable .NET package source first."
+init_system "10.0" "$@"
+[[ $VERSION =~ ^[0-9]+\.[0-9]+$ ]] || die "Expected a .NET SDK major.minor channel"
+require_commands apt-get
 
 pre_run
-
-#
-# 2024 - Removed the Microsoft repo, as the SDK is available in the default Ubuntu sources
-#
-
-sudo apt-get update -qq
-sudo apt-get install -y -qq dotnet-sdk-"$VERSION"
-sudo apt-get install -y -qq aspnetcore-runtime-"$VERSION"
-sudo apt-get install -y -qq dotnet-runtime-"$VERSION"
-
-post_run --version
+apt_install "dotnet-sdk-$VERSION" "aspnetcore-runtime-$VERSION" "dotnet-runtime-$VERSION"
+INSTALLED_CMD=/usr/bin/dotnet
+post_run --list-sdks

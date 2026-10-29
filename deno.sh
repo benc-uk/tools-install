@@ -1,15 +1,20 @@
-#!/bin/bash 
-set -e
+#!/bin/bash
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-CMD=deno
 NAME="Deno JavaScript Runtime"
+CMD=deno
+GITHUB="denoland/deno"
+DEFAULT_INSTALL_DIR="$HOME/.deno/bin"
+INSTALL_NOTES="Preserves the existing ~/.deno/bin layout; no shell profile edits."
+init_binary "latest" "$@"
+PLATFORM=$(asset_arch x86_64 aarch64)
+VERSION=$(github_version "$GITHUB" "$VERSION")
+require_commands unzip
 
-echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME\e[0m ..."
-
-curl -fsSL https://deno.land/x/install/install.sh | sh
-
-export PATH="$PATH:$HOME/.deno/bin"
-echo -e "\n\e[31m»»» 📢 \e[32mNote! '\$HOME/.deno/bin' was temporarily added to your PATH"
-echo -e "\e[31m»»» 📢 \e[32mAmend your shell startup scripts to make this change permanent"
-echo -e "\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
-echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"
+pre_run
+download "https://github.com/$GITHUB/releases/download/v$VERSION/deno-$PLATFORM-unknown-linux-gnu.zip" "$WORK_DIR/release.zip"
+unpack "$WORK_DIR/release.zip"
+install_binary "$WORK_DIR/$CMD"
+post_run

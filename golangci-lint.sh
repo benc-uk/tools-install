@@ -1,16 +1,17 @@
-#!/bin/bash 
-set -e
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+#!/bin/bash
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-GITHUB="golangci/golangci-lint"
-VERSION=${1:-"$(get_latest_release $GITHUB)"}
-INSTALL_DIR=${2:-"$HOME/.local/bin"}
-CMD="golangci-lint"
 NAME="Golang CI Lint"
+CMD=golangci-lint
+GITHUB="golangci/golangci-lint"
+init_binary "latest" "$@"
+VERSION=$(github_version "$GITHUB" "$VERSION")
+require_commands tar
 
-pre_run 
-
-curl -sSL https://github.com/$GITHUB/releases/download/v"${VERSION}"/golangci-lint-"${VERSION}"-linux-amd64.tar.gz | \
-     tar -zx -C "$INSTALL_DIR" --strip-components 1 golangci-lint-"${VERSION}"-linux-amd64/$CMD
-
+pre_run
+download "https://github.com/$GITHUB/releases/download/v$VERSION/golangci-lint-$VERSION-linux-$ARCH.tar.gz" "$WORK_DIR/release.tar.gz"
+unpack "$WORK_DIR/release.tar.gz"
+install_binary "$WORK_DIR/golangci-lint-$VERSION-linux-$ARCH/$CMD"
 post_run

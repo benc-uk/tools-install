@@ -1,16 +1,15 @@
-#!/bin/bash 
-set -e
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+#!/bin/bash
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-GITHUB="cosmtrek/air"
-VERSION=${1:-"$(get_latest_release $GITHUB)"}
-INSTALL_DIR=${2:-"$HOME/.local/bin"}
-CMD=air
 NAME="Air - Hot reloader for Go"
+CMD=air
+GITHUB="air-verse/air"
+init_binary "latest" "$@"
+VERSION=$(github_version "$GITHUB" "$VERSION")
 
 pre_run
-
-curl -sSL https://github.com/$GITHUB/releases/download/v"${VERSION}"/air_"${VERSION}"_linux_amd64 -o "$INSTALL_DIR"/$CMD
-chmod +x "$INSTALL_DIR"/$CMD
- 
+download "https://github.com/$GITHUB/releases/download/v$VERSION/air_${VERSION}_linux_$ARCH" "$WORK_DIR/$CMD"
+install_binary "$WORK_DIR/$CMD"
 post_run -v

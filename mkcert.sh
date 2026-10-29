@@ -1,18 +1,18 @@
-#!/bin/bash 
-set -e
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+#!/bin/bash
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-VERSION=${1:-"Latest"}
-INSTALL_DIR=${2:-"$HOME/.local/bin"}
-CMD=mkcert
 NAME="mkcert Cert Utility"
+CMD=mkcert
+GITHUB="FiloSottile/mkcert"
+INSTALL_NOTES="Also installs libnss3-tools with apt. Does not create or trust a local CA."
+init_binary "latest" "$@"
+VERSION=$(github_version "$GITHUB" "$VERSION")
+require_commands apt-get
 
 pre_run
-
-sudo apt install -y -q libnss3-tools
-curl -sSL "https://dl.filippo.io/mkcert/latest?for=linux/amd64" -o "$INSTALL_DIR"/mkcert
-chmod +x "$INSTALL_DIR"/mkcert
-
+download "https://github.com/$GITHUB/releases/download/v$VERSION/mkcert-v$VERSION-linux-$ARCH" "$WORK_DIR/$CMD"
+apt_install libnss3-tools
+install_binary "$WORK_DIR/$CMD"
 post_run
-
-# Instructions for use with WSL - https://gist.githubusercontent.com/benc-uk/54b663b7e2443d5fbfeaa1b30391436b/raw/50bcae5047f72c277e177428d531748401f54d93/mkcert.md

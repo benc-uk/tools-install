@@ -1,18 +1,21 @@
-#!/bin/bash 
-set -e
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+#!/bin/bash
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-CMD=dockerd
 NAME="Docker Engine & CLI"
-VERSION=$(apt_version docker-ce)
+CMD=docker
+INSTALL_NOTES="Installs Docker's apt packages. Group membership is a manual, root-equivalent opt-in."
+init_system "" "$@"
+[[ -n $DISTRO_CODENAME ]] || die "Cannot determine distribution codename"
+require_commands apt-get gpg curl
 
 pre_run
-
-curl -fsSL https://get.docker.com/ | sh
-sudo groupadd docker || true
-sudo usermod -aG docker "$USER"
-
-echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
-echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"
-echo -e "\e[34m»»» 📜 \e[32mNOTE 1: Please close this shell and open a new one to run docker without sudo"
-echo -e "\e[34m»»» 📜 \e[32mNOTE 2: Docker will NOT auto start on WSL, you must run 'sudo service docker start'"
+add_apt_repo docker "https://download.docker.com/linux/$DISTRO/gpg" \
+  "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/$DISTRO $DISTRO_CODENAME stable"
+apt_install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+INSTALLED_CMD=/usr/bin/docker
+post_run
+log "Optional: sudo usermod -aG docker \"\$USER\", then start a new login session."
+log "The docker group grants root-equivalent access. It has not been changed."
+log "On WSL, use systemd where enabled, or start Docker with sudo service docker start."

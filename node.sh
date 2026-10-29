@@ -1,14 +1,22 @@
 #!/bin/bash
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-VERSION=${1:-"24"}
-CMD=node
 NAME="Node.js"
+CMD=node
+VERSION_USAGE="major release channel, for example 24 (not an exact patch version)"
+INSTALL_NOTES="Configures the NodeSource apt repository; installs Node.js and its bundled npm."
+init_system "24" "$@"
+[[ $VERSION =~ ^[0-9]+$ ]] || die "Expected a Node.js major release number"
+require_commands apt-get gpg curl
 
 pre_run
-
-curl -sL "https://deb.nodesource.com/setup_${VERSION}.x" | sudo -E bash -
-sudo apt install -y nodejs
-
-post_run --version
-echo -e "\e[34m»»» 💡 \e[32mNPM version details: \e[39m$(npm --version)"
+add_apt_repo nodesource "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key" \
+  "deb [arch=$ARCH signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$VERSION.x nodistro main"
+printf 'Package: nodejs\nPin: origin deb.nodesource.com\nPin-Priority: 600\n' > "$WORK_DIR/nodejs"
+as_root install -m 0644 "$WORK_DIR/nodejs" /etc/apt/preferences.d/nodejs
+apt_install --allow-downgrades "nodejs=$VERSION.*"
+INSTALLED_CMD=/usr/bin/node
+post_run
+INSTALLED_CMD=/usr/bin/npm post_run

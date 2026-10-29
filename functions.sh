@@ -1,21 +1,18 @@
-#!/bin/bash 
-set -e 
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+#!/bin/bash
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-VERSION=${1:-"4"}
-CMD=func
 NAME="Azure Functions Core Tools"
+CMD=func
+VERSION_USAGE="major package channel, for example 4"
+INSTALL_NOTES="Registers Microsoft's distro-specific package feed and installs Core Tools using apt."
+init_system "4" "$@"
+[[ $VERSION =~ ^[0-9]+$ ]] || die "Expected a Core Tools major release number"
+require_commands apt-get dpkg curl
 
 pre_run
-
-# Download the Microsoft repository GPG keys
-wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O /tmp/packages-microsoft-prod.deb
-
-# Register the Microsoft repository GPG keys
-sudo dpkg -i /tmp/packages-microsoft-prod.deb
-rm -f /tmp/packages-microsoft-prod.deb
-
-sudo apt-get update -qq
-sudo apt-get install -y -qq azure-functions-core-tools-"$VERSION"
-
+microsoft_repo
+apt_install "azure-functions-core-tools-$VERSION"
+INSTALLED_CMD=/usr/bin/func
 post_run

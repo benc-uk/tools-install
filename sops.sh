@@ -1,16 +1,21 @@
 #!/bin/bash
-set -e
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-GITHUB="mozilla/sops"
-VERSION=${1:-"$(get_latest_release $GITHUB)"}
-INSTALL_DIR=${2:-"$HOME/.local/bin"}
+NAME="Sops"
 CMD=sops
-NAME="Mozilla Sops"
+GITHUB="getsops/sops"
+init_binary "latest" "$@"
+VERSION=$(github_version "$GITHUB" "$VERSION")
+ASSET="sops-v$VERSION.linux.$ARCH"
+if [[ $ARCH == amd64 ]]; then
+  URL=$(github_asset "$GITHUB" "v$VERSION" "$ASSET" "sops-v$VERSION.linux")
+else
+  URL=$(github_asset "$GITHUB" "v$VERSION" "$ASSET")
+fi
 
 pre_run
-
-curl -sL "https://github.com/${GITHUB}/releases/download/v${VERSION}/sops-v${VERSION}.linux" -o "$INSTALL_DIR"/sops
-chmod +x "$INSTALL_DIR"/sops
-
+download "$URL" "$WORK_DIR/$CMD"
+install_binary "$WORK_DIR/$CMD"
 post_run

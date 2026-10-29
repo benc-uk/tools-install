@@ -1,16 +1,18 @@
 #!/bin/bash
-set -e
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-CMD=ngrok
 NAME="ngrok"
-INSTALL_DIR=${2:-"$HOME/.local/bin"}
-VERSION="2"
+CMD=ngrok
+VERSION_USAGE="legacy major channel 2 only (not an exact version)"
+INSTALL_NOTES="Preserves the v2 distribution channel; upgrading the catalogue to v3 is deferred."
+init_binary "2" "$@"
+[[ $VERSION == 2 ]] || die "This installer supports only the legacy channel 2"
+require_commands unzip
 
 pre_run
-
-wget -q "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip" -O /tmp/ngrok.zip
-unzip -o /tmp/ngrok.zip -d "$INSTALL_DIR" > /dev/null
-rm -f /tmp/ngrok.zip
-
-post_run
+download "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-$ARCH.zip" "$WORK_DIR/release.zip"
+unpack "$WORK_DIR/release.zip"
+install_binary "$WORK_DIR/$CMD"
+post_run version

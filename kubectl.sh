@@ -1,16 +1,16 @@
 #!/bin/bash
-set -e
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-VERSION=${1:-"$(curl -L -s https://dl.k8s.io/release/stable.txt)"}
-VERSION=${VERSION:1} # Remove the leading 'v'
-INSTALL_DIR=${2:-"$HOME/.local/bin"}
-CMD=kubectl
 NAME="Kubectl"
+CMD=kubectl
+init_binary "latest" "$@"
+if [[ $VERSION == latest ]]; then VERSION=$(fetch "https://dl.k8s.io/release/stable.txt"); fi
+VERSION=${VERSION#v}
+[[ $VERSION =~ ^[0-9]+\.[0-9]+\.[0-9]+([.-][[:alnum:].]+)?$ ]] || die "Invalid Kubernetes version: $VERSION"
 
 pre_run
-
-curl -sSL "https://dl.k8s.io/release/v${VERSION}/bin/linux/amd64/kubectl" -o "$INSTALL_DIR"/kubectl
-chmod +x "$INSTALL_DIR"/kubectl
-
-post_run version
+download "https://dl.k8s.io/release/v$VERSION/bin/linux/$ARCH/kubectl" "$WORK_DIR/$CMD"
+install_binary "$WORK_DIR/$CMD"
+post_run version --client

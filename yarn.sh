@@ -1,13 +1,17 @@
 #!/bin/bash
-set -e
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-CMD=yarn
 NAME="Yarn"
+CMD=yarn
+INSTALL_NOTES="Installs the global Yarn bootstrap using npm as root; project Yarn versions are separate."
+init_system "" "$@"
+require_commands npm
 
-echo -e "\e[34m»»» 📦 \e[32mInstalling \e[33m$NAME\e[0m ..."
-
-sudo npm install -g yarn
-
-echo -e "\n\e[34m»»» 👲 \e[32mYarn is now managed per-project, see https://yarnpkg.com/getting-started/install#per-project-install"
-echo -e "\n\e[34m»»» 💾 \e[32mInstalled to: \e[33m$(which $CMD)"
-echo -e "\e[34m»»» 💡 \e[32mVersion details: \e[39m$($CMD --version)"
+pre_run
+as_root npm install -g yarn
+NPM_PREFIX=$(as_root npm prefix -g)
+INSTALLED_CMD="$NPM_PREFIX/bin/yarn"
+post_run
+log "For project-managed Yarn versions, see https://yarnpkg.com/getting-started/install"

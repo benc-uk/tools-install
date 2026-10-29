@@ -1,12 +1,18 @@
 #!/bin/bash
-set -e
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-CMD=az
 NAME="Azure CLI"
+CMD=az
+INSTALL_NOTES="Configures Microsoft's Azure CLI apt repository and installs the available package."
+init_system "" "$@"
+[[ -n $DISTRO_CODENAME ]] || die "Cannot determine distribution codename"
+require_commands apt-get gpg curl
 
 pre_run
-
-curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-
-post_run
+add_apt_repo azure-cli "https://packages.microsoft.com/keys/microsoft.asc" \
+  "deb [arch=$ARCH signed-by=/etc/apt/keyrings/azure-cli.gpg] https://packages.microsoft.com/repos/azure-cli/ $DISTRO_CODENAME main"
+apt_install azure-cli
+INSTALLED_CMD=/usr/bin/az
+post_run version

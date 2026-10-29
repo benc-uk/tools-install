@@ -1,16 +1,15 @@
-#!/bin/bash 
-set -e
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+#!/bin/bash
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-GITHUB="kubernetes-sigs/cluster-api"
-VERSION=${1:-"$(get_latest_release $GITHUB)"}
-INSTALL_DIR=${2:-"$HOME/.local/bin"}
-CMD=clusterctl
 NAME="K8S Cluster API"
+CMD=clusterctl
+GITHUB="kubernetes-sigs/cluster-api"
+init_binary "latest" "$@"
+VERSION=$(github_version "$GITHUB" "$VERSION")
 
-pre_run 
-
-curl -SsL https://github.com/$GITHUB/releases/download/v"${VERSION}"/clusterctl-linux-amd64 -o "$INSTALL_DIR"/clusterctl
-chmod +x "$INSTALL_DIR"/clusterctl
-
+pre_run
+download "https://github.com/$GITHUB/releases/download/v$VERSION/clusterctl-linux-$ARCH" "$WORK_DIR/$CMD"
+install_binary "$WORK_DIR/$CMD"
 post_run version

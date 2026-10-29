@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+case ${1:-} in
+  -s) printf '%s\n' "${MOCK_OS:-Linux}" ;;
+  -m) printf '%s\n' "${MOCK_ARCH:-x86_64}" ;;
+  *) printf 'Unexpected uname argument\n' >&2; exit 1 ;;
+esac

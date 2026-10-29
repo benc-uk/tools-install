@@ -1,15 +1,15 @@
-#!/bin/bash 
-set -e
-source <(curl -sSL https://raw.githubusercontent.com/benc-uk/tools-install/master/_lib.sh) # Load libary from remote URL, it's safe!
+#!/bin/bash
+set -euo pipefail
+# shellcheck source=_lib.sh
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/_lib.sh"
 
-GITHUB="open-policy-agent/opa"
-VERSION=${1:-"$(get_latest_release $GITHUB)"}
-INSTALL_DIR=${2:-"$HOME/.local/bin"}
-CMD=opa
 NAME="Open Policy Agent"
+CMD=opa
+GITHUB="open-policy-agent/opa"
+init_binary "latest" "$@"
+VERSION=$(github_version "$GITHUB" "$VERSION")
 
 pre_run
-
-curl -sSL https://github.com/$GITHUB/releases/download/v"${VERSION}"/opa_linux_amd64 -o "$INSTALL_DIR"/$CMD
-
+download "https://github.com/$GITHUB/releases/download/v$VERSION/opa_linux_$ARCH" "$WORK_DIR/$CMD"
+install_binary "$WORK_DIR/$CMD"
 post_run version
