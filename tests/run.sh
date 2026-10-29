@@ -60,6 +60,10 @@ for MOCK_ARCH in x86_64 aarch64; do
   arch=amd64 triple=x86_64 short=x64
   if [[ $MOCK_ARCH == aarch64 ]]; then arch=arm64; triple=aarch64; short=arm64; fi
   export MOCK_TAG=v1.2.3
+  check_binary copilot copilot v1.2.3 "https://github.com/github/copilot-cli/releases/download/v1.2.3/copilot-linux-$short.tar.gz" copilot tar.gz --version
+  check_binary copilot copilot 1.2.3 "$MOCK_DOWNLOAD" copilot tar.gz --version
+  check_binary copilot copilot "" "$MOCK_DOWNLOAD" copilot tar.gz --version
+  assert_contains "$TEST_DIR/output" "enter /login"
   check_binary yq yq v1.2.3 "https://github.com/mikefarah/yq/releases/download/v1.2.3/yq_linux_$arch" binary raw --version
   check_binary yq yq "" "$MOCK_DOWNLOAD" binary raw --version
   export MOCK_EXTRA_MEMBER=age/age-keygen

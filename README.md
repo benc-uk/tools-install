@@ -44,6 +44,7 @@ Ordinary binary installers do not use sudo. System installers use root directly,
 - [yq.sh](./yq.sh) installs Mike Farah's Go-based YAML processor, not the unrelated Python package of the same name.
 - [age.sh](./age.sh) installs `age` and `age-keygen` for file encryption. It does not install the optional bundled tools/plugins, generate keys or configure SOPS.
 - [uv.sh](./uv.sh) installs `uv` and `uvx` for Python package and tool management. It does not install a Python interpreter or modify shell profiles.
+- [copilot.sh](./copilot.sh) installs the standalone GitHub Copilot CLI from official release binaries, without Node.js, npm or the old `gh copilot` extension. Start `copilot` and enter `/login` yourself; using it requires a GitHub account with Copilot CLI access.
 
 These installers accept `[version] [install-dir]`, defaulting to the latest release and `$HOME/.local/bin`.
 
@@ -143,6 +144,7 @@ The personal [_backup.sh](./_backup.sh) helper is outside the supported installe
 - [bicep.sh](./bicep.sh) - Azure Bicep
 - [bun.sh](./bun.sh) - Bun.js
 - [clusterctl.sh](./clusterctl.sh) - K8S Cluster API
+- [copilot.sh](./copilot.sh) - GitHub Copilot CLI
 - [dapr.sh](./dapr.sh) - Dapr CLI
 - [deno.sh](./deno.sh) - Deno JavaScript Runtime
 - [devcontainer-cli.sh](./devcontainer-cli.sh) - Dev Container CLI
